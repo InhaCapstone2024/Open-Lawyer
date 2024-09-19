@@ -4,3 +4,4 @@
 *.txt text eol=lf
 *.java text eol=lf
 gradlew text eol=lf
+chatbot-app/service/KoBERT/* !text !filter !merge !diff
