@@ -2,28 +2,29 @@ services:
   react-app:
     build:
       context: ./react-app
-      dockerfile : Dockerfile
+      # dockerfile : Dockerfile       # 배포용 도커 파일
+      dockerfile : dockerfile.dev   # 개발용 도커 파일
     image: 'react-image:latest'
     container_name: 'react-container'
     restart: always
     stdin_open: true
     tty: true
     volumes:
-      - ./react-app:/react-app
-      - .env:/.env
+      - ./react-app/src:/react-app/src
     depends_on:
       - springboot-app
     ports:
       - ${REACT_HOST_PORT}:${REACT_SERVER_PORT}
     env_file:
-      - .env
+      - ./react-app/.env
     networks:
       - inha
-      
+
   springboot-app:
     build:
       context: ./springboot-app
-      dockerfile : Dockerfile
+      # dockerfile : Dockerfile         # 배포용 도커 파일
+      dockerfile : ./dockerfile.dev   # 개발용 도커 파일
     image: 'springboot-image:latest'
     container_name: 'springboot-container'
     restart: always
@@ -31,11 +32,11 @@ services:
     tty: true
     volumes:
       - ./springboot-app:/springboot-app
-      - .env:/.env
+      - ./springboot-app/.env:/.env
     ports:
       - ${SPRINGBOOT_HOST_PORT}:${SPRINGBOOT_SERVER_PORT}
     env_file:
-      - .env
+      - ./springboot-app/.env
     networks:
       - inha
 
