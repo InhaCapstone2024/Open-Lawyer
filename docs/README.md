@@ -7,6 +7,8 @@
 ## Current: ver. 1.0.0<br/>
 >* ver 1.0.0.
 >   * Init: 프로젝트 세팅 ( React + Spring Boot )
+>   * react-app: 코드 변경 내역 감지 -> 즉시 코드 반영
+>   * CICD 파이프라인 구축: Github Actions + AWS ECR & ECS ( Fargate )
 
 # 1. 프로그램 (프로젝트) 설명
 
@@ -18,19 +20,42 @@
 # 2. Prerequisite
 
 - 본 프로젝트는 Docker를 사용하므로 `.env.template` 파일을 참고하여 `.env` 파일에 환경 변수값을 작성해주세요.
+    - root, react-app, springboot-app 총 3가지 파일을 모두 작성해주세요.
     - `HOST_PORT` : 외부에서 컨테이너의 애플리케이션에 접근하는데 사용하는 포트 ( 노출되도 괜찮은 포트 )
     - `SERVER_PORT` : 애플리케이션이 컨테이너 내에서 통신하는 포트 ( 노출되면 안되는 포트 )
     - Vite에서는 보안이 필요한 환경변수의 유출을 막기 위해서 `VITE_`으로 시작하지 않는 환경변수는 무시되기 때문에 `VITE_SPRINGBOOT_HOST_PORT`가 필요합니다.
-    ```
-    # 예시
-    SPRINGBOOT_HOST_PORT=8081
-    SPRINGBOOT_SERVER_PORT=8080
+    - `IP_ADDRESS` : 사용하는 도메인 혹은 로드밸런서 DNS이름으로 설정해주세요. 만약 로컬 환경이라면 `localhost`로 설정해주세요.
+    - `root/.env` : 로컬 환경에서 docker-compose.yml 파일을 실행시키기 위해 필요한 환경 변수 파일입니다.
+        ```
+        # 예시
+        SPRINGBOOT_HOST_PORT=8081
+        SPRINGBOOT_SERVER_PORT=8080
 
-    REACT_HOST_PORT=5174
-    REACT_SERVER_PORT=5173
+        REACT_HOST_PORT=3001
+        REACT_SERVER_PORT=3000
+        ```
+    - `react-app/.env` : React 애플리케이션 환경을 실행시키기 위해 필요한 환경 변수 파일입니다.
+        ```
+        # 예시
+        VITE_REACT_SERVER_PORT=3000
+        VITE_SPRINGBOOT_HOST_PORT=8081
 
-    VITE_SPRINGBOOT_HOST_PORT=8081
-    ```
+        VITE_IP_ADDRESS=localhost
+        ```
+    - `springboot-app/.env` : Springboot 애플리케이션 환경을 실행시키기 위해 필요한 환경 변수 파일입니다.
+        ```
+        # 예시
+        REACT_HOST_PORT=3001
+
+        IP_ADDRESS=localhost
+        ```
+- 본 프로젝트는 Springboot를 사용하므로 `springboot-app/src/main/resources/application.properties.template` 파일을 참고하여 `application.properties` 파일을 생성해주세요.
+    - `springboot-app/src/main/resources/application.properties`
+        ```
+        # 예시
+        spring.application.name=springboot-app
+        server.port=8080
+        ```
 
 # 3. 구동 방법
 
@@ -52,7 +77,15 @@
 
 # 4. 디렉토리 및 파일 설명
 ```
-    /LAW-AIER
+    /OPEN-LAWYER
+    ├── .github/
+    │   └── workflows
+    │       └── CICD.yml 
+    │
+    ├── docs/
+    │   ├── PULL_REQUEST_TEMPLATE.md
+    │   └── README.md
+    │
     ├── react-app/
     │   ├── public/
     │   │   └── vite.svg
@@ -64,9 +97,11 @@
     │   │   ├── index.css
     │   │   └── main.jsx
     │   │
+    │   ├── .env
+    │   ├── .env.template
     │   ├── .gitignore
     │   ├── dockerfile
-    │   ├── entrypoint.sh
+    │   ├── dockerfile.dev
     │   ├── eslint.config.js
     │   ├── index.html
     │   ├── package-lock.json
@@ -82,6 +117,10 @@
     │   ├── src/
     │   │   ├── main/
     │   │   │   ├── java/com/inha/springbootapp/
+    │   │   │   │   ├── domain
+    │   │   │   │   │   └── HelloController.java
+    │   │   │   │   ├── global
+    │   │   │   │   │   └── GlobalCorsConfig.java
     │   │   │   │   └── springbootAppApplication.java
     │   │   │   └── resources/
     │   │   │       ├── application.properties
@@ -90,10 +129,12 @@
     │   │       └── java/com/inha/springbootapp/
     │   │           └── springbootAppApplicationTest.java
     │   │
+    │   ├── .env
+    │   ├── .env.template
     │   ├── .gitignore
     │   ├── build.gradle
     │   ├── dockerfile
-    │   ├── entrypoint.sh
+    │   ├── dockerfile.dev
     │   ├── gradlew
     │   ├── gradlew.bat
     │   └── settings.gradle
@@ -102,6 +143,5 @@
     ├── .env.template
     ├── .gitattributes
     ├── .gitignore
-    ├── docker-compose.yml
-    └── README.md
+    └── docker-compose.yml
 ```
