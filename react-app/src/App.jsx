@@ -7,8 +7,9 @@ function App() {
   const [count, setCount] = useState(0)
   const [message, setMessage] = useState('')
 
-  const springbootApiPort = import.meta.env.VITE_SPRINGBOOT_HOST_PORT;
-  const apiUrl = `http://localhost:${springbootApiPort}/api/hello`;
+  const springbootApiPort = import.meta.env.VITE_SPRINGBOOT_HOST_PORT;    // springboot port
+  const ipAddress =  import.meta.env.VITE_IP_ADDRESS;                     // IP 주소
+  const apiUrl = `http://${ipAddress}:${springbootApiPort}/api/hello`;    // api 호출 URL
 
   const callApi = async () => {
     try {

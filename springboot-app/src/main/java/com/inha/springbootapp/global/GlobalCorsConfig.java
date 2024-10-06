@@ -10,12 +10,8 @@ import io.github.cdimascio.dotenv.Dotenv;
 @Configuration
 public class GlobalCorsConfig implements WebMvcConfigurer {
 
-    private final Dotenv dotenv = Dotenv.configure()
-                            .directory("/") // 디렉토리 지정
-                            .filename(".env") // 파일명 지정
-                            .load();
-
-    private final String reactURL = "http://localhost:" + dotenv.get("REACT_HOST_PORT");
+    Dotenv dotenv = Dotenv.load();
+    private final String reactURL = "http://" + dotenv.get("IP_ADDRESS") + ":" + dotenv.get("REACT_HOST_PORT");
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
