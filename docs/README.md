@@ -31,13 +31,13 @@
         SPRINGBOOT_HOST_PORT=8081
         SPRINGBOOT_SERVER_PORT=8080
 
-        REACT_HOST_PORT=3001
-        REACT_SERVER_PORT=3000
+        REACT_HOST_PORT=5174
+        REACT_SERVER_PORT=5173
         ```
     - `react-app/.env` : React 애플리케이션 환경을 실행시키기 위해 필요한 환경 변수 파일입니다.
         ```
         # 예시
-        VITE_REACT_SERVER_PORT=3000
+        VITE_REACT_SERVER_PORT=5173
         VITE_SPRINGBOOT_HOST_PORT=8081
 
         VITE_IP_ADDRESS=localhost
@@ -45,7 +45,7 @@
     - `springboot-app/.env` : Springboot 애플리케이션 환경을 실행시키기 위해 필요한 환경 변수 파일입니다.
         ```
         # 예시
-        REACT_HOST_PORT=3001
+        REACT_HOST_PORT=5174
 
         IP_ADDRESS=localhost
         ```
