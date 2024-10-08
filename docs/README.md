@@ -1,7 +1,7 @@
 # 2024년 하반기 인하대학교 컴퓨터공학 종합설계 (1조) 프로젝트
 
 > Initial written at September 19, 2024 <br/>
-> last updated at: September 19, 2024
+> last updated at: October 08, 2024
 
 ## Current: ver. 1.0.1<br/>
 
