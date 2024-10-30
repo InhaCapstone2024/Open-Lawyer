@@ -1,35 +1,59 @@
 @font-face {
-  font-family: "Pretendard-Light";
-  src: url("./assets/fonts/Pretendard-Light.woff2") format("woff2");
+  font-family: 'Pretendard-Light';
+  src: url('./assets/fonts/Pretendard-Light.woff2') format('woff2');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Pretendard-Regular";
-  src: url("./assets/fonts/Pretendard-Regular.woff2") format("woff2");
+  font-family: 'Pretendard-Regular';
+  src: url('./assets/fonts/Pretendard-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Pretendard-Medium";
-  src: url("./assets/fonts/Pretendard-Medium.woff2") format("woff2");
+  font-family: 'Pretendard-Medium';
+  src: url('./assets/fonts/Pretendard-Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Pretendard-SemiBold";
-  src: url("./assets/fonts/Pretendard-SemiBold.woff2") format("woff2");
+  font-family: 'Pretendard-SemiBold';
+  src: url('./assets/fonts/Pretendard-SemiBold.woff2') format('woff2');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Pretendard-Bold";
-  src: url("./assets/fonts/Pretendard-Bold.woff2") format("woff2");
+  font-family: 'Pretendard-Bold';
+  src: url('./assets/fonts/Pretendard-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
+}
+
+:root {
+  /* Color */
+  --key: #5a85da;
+  --key-hover: #4276db;
+  --sub: #eff6ff;
+  --sub-hover: #bfdbfe;
+  --white: #ffffff;
+  --black: #000000;
+  --gray1: #e5e5e5;
+  --gray2: #a3a3a3;
+  --gray3: #737373;
+
+  --bluegray1: #94a3b8;
+  --bluegray2: #334155;
+  --red: #ef4444;
+  --red-hover: #dc2626;
+  --green: #22c55e;
+  --green-hover: #16a34a;
+
+  body {
+    font-family: 'Pretendard-Regular', sans-serif;
+  }
 }
