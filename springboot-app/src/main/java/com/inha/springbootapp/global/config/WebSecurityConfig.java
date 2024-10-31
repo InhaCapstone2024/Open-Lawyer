@@ -29,11 +29,11 @@ public class WebSecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                                .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-                                .permitAll()
-                                .requestMatchers("/").permitAll()
-                                .requestMatchers("/**").permitAll()
-                                .anyRequest().authenticated()
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                        .permitAll()
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/**").permitAll()
+                        .anyRequest().authenticated()
                 );
 
         return http.build();
