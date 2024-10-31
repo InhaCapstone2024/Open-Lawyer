@@ -23,9 +23,11 @@ public abstract class AuthUtil {
     protected static final Dotenv dotenv = Dotenv.load();
 
     protected abstract String getTokenEndpoint();
+
     protected abstract String getUserInfoEndpoint();
 
     protected abstract void populateAccessTokenBody(MultiValueMap<String, String> body, String code);
+
     protected abstract SocialLoginUserDto parseUserData(String responseBody, String loginType) throws JsonProcessingException;
 
     public String getAccessToken(String code) throws JsonProcessingException {

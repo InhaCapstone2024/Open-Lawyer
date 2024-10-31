@@ -13,7 +13,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     public User getUserInfo(String accessToken) {
-        Claims claims = JwtUtil.getUserInfoFromToken(accessToken.replace("Bearer","").trim());
+        Claims claims = JwtUtil.getUserInfoFromToken(accessToken.replace("Bearer", "").trim());
         String email = claims.get("email", String.class);
         return userRepository.findByEmail(email);
     }

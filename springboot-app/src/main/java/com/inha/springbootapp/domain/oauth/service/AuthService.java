@@ -25,7 +25,7 @@ public class AuthService {
     public String callback(String loginType, String code, HttpServletResponse response) throws JsonProcessingException {
         String accessToken;
         SocialLoginUserDto userInfoResponse;
-        
+
         switch (loginType) {
             case "kakao":
                 accessToken = kakaoAuthUtil.getAccessToken(code);
@@ -47,7 +47,7 @@ public class AuthService {
         return createAndReturnToken(user, response);
     }
 
-    private User saveUser(String loginType, SocialLoginUserDto userInfoResponse){
+    private User saveUser(String loginType, SocialLoginUserDto userInfoResponse) {
 
         User saveduser = userRepository.findBySocialLoginId(userInfoResponse.getSocialLoginId());
         if (saveduser == null) {
@@ -62,14 +62,14 @@ public class AuthService {
         return saveduser;
     }
 
-    private String createAndReturnToken(User user, HttpServletResponse response){
+    private String createAndReturnToken(User user, HttpServletResponse response) {
         int ACCESS_TOKEN_TIME = 60 * 60 * 1000;
         int REFRESH_TOKEN_TIME = 24 * 60 * 60 * 1000;
 
         String accessToken = JwtUtil.createJWT(user, ACCESS_TOKEN_TIME);
         String refreshToken = JwtUtil.createJWT(user, REFRESH_TOKEN_TIME);
 
-        CookieUtils.addCookie(response,"refreshToken", refreshToken, REFRESH_TOKEN_TIME);
+        CookieUtils.addCookie(response, "refreshToken", refreshToken, REFRESH_TOKEN_TIME);
 
         return accessToken;
     }
