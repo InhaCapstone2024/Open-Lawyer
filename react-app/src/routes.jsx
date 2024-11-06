@@ -1,15 +1,15 @@
-import { createBrowserRouter } from "react-router-dom";
-import Layout from "./pages/Layout";
-import Example from "./components/Example";
+import { createBrowserRouter } from 'react-router-dom';
+import Layout from './pages/Layout';
+import Example from './components/Example';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <Layout />,
     children: [
       // 추가 라우팅
       {
-        path: "ex",
+        path: 'ex',
         element: <Example />,
       },
     ],
