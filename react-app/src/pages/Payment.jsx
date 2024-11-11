@@ -1,9 +1,10 @@
-
 import { useState } from 'react';
+import Button from '../components/Button/Button';
+import { css } from '@emotion/css';
 
 const Payment = () => {
-  const [amount, setAmount] = useState(10); // 결제 금액
-  const [buyerName, setBuyerName] = useState('홍길동'); // 구매자 이름
+  const [amount, setAmount] = useState(3900); // 결제 금액
+  const [buyerName, setBuyerName] = useState('김인하'); // 구매자 이름
 
   // IAMPORT 환경 변수
   const IMP_ID = import.meta.env.VITE_IAMPORT_IMP;
@@ -51,21 +52,23 @@ const Payment = () => {
 
   return (
     <div>
-      <h2>결제하기</h2>
+      <h2>프리미엄 구독권을 결제합니다.</h2>
       {/* 입력 받는 데이터 예시 */}
+      <p>결제 금액 </p>
       <input
         type="number"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
         placeholder="결제 금액"
       />
+      <p>이름 </p>
       <input
         type="text"
         value={buyerName}
         onChange={(e) => setBuyerName(e.target.value)}
         placeholder="구매자 이름"
       />
-      <button onClick={requestPayment}>결제 요청</button>
+      <Button onClick={requestPayment} label="결제요청" />
     </div>
   );
 };
