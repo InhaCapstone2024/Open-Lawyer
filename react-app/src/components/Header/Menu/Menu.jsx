@@ -29,6 +29,7 @@ const Menu = () => {
       <ul css={MenuWrapper}>
         <li css={MenuItem}>챗봇과 대화하기</li>
         <li css={MenuItem}>법률 용어 사전</li>
+        <li css={MenuItem}>가격</li>
       </ul>
     </nav>
   );
