@@ -22,11 +22,12 @@ public class TermInfoController {
 
     @GetMapping("/terminfo")
     public Result getTermInfo() {
-        System.out.println("getTermInfo 호출됨");
         List<TermInfo> findTermInfos = termInfoService.findTermInfos();
-        List<TermInfoDto> collect = findTermInfos.stream()
-                .map(m -> new TermInfoDto(m.getTermName()))
-                .collect(Collectors.toList());
+        List<TermInfoDto> collect = new ArrayList<>();
+
+        for (TermInfo termInfo : findTermInfos) {
+            collect.add(new TermInfoDto(termInfo.getId(), termInfo.getTermName()));
+        }
 
         return new Result(collect);
     }
@@ -39,7 +40,6 @@ public class TermInfoController {
 
         return new TermDetailDto(findTermInfo.getId(),
                 findTermInfo.getTermName(),
-                findTermInfo.getSource(),
                 findTermInfo.getDescription());
     }
 }
