@@ -8,5 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class TermInfoDto {
+    private Long id;
     private String name;
 }
