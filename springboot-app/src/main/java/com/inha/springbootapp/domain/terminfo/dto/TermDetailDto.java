@@ -15,7 +15,5 @@ public class TermDetailDto {
 
     private String termName;
 
-    private String source;
-
     private String description;
 }
