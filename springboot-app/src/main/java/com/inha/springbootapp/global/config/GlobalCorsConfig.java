@@ -1,4 +1,4 @@
-package com.inha.springbootapp.global;
+package com.inha.springbootapp.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
