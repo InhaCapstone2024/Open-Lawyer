@@ -1,6 +1,6 @@
+/** @jsxImportSource @emotion/react */
 import { useState } from 'react';
-import Button from '../components/Button/Button';
-import { css } from '@emotion/css';
+import Pay from '../components/Pay/Pay';
 
 const Payment = () => {
   const [amount, setAmount] = useState(3900); // 결제 금액
@@ -51,25 +51,13 @@ const Payment = () => {
   };
 
   return (
-    <div>
-      <h2>프리미엄 구독권을 결제합니다.</h2>
-      {/* 입력 받는 데이터 예시 */}
-      <p>결제 금액 </p>
-      <input
-        type="number"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-        placeholder="결제 금액"
-      />
-      <p>이름 </p>
-      <input
-        type="text"
-        value={buyerName}
-        onChange={(e) => setBuyerName(e.target.value)}
-        placeholder="구매자 이름"
-      />
-      <Button onClick={requestPayment} label="결제요청" />
-    </div>
+    <Pay
+      amount={amount}
+      setAmount={setAmount}
+      buyerName={buyerName}
+      setBuyerName={setBuyerName}
+      onPay={requestPayment}
+    />
   );
 };
 
