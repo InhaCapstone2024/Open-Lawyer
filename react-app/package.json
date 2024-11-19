@@ -17,7 +17,7 @@
     "react": "^18.3.1",
     "react-app": "file:",
     "react-dom": "^18.3.1",
-    "iamport-react-native": "^1.0.0"
+    "iamport-react-native": "^1.0.0",
     "react-router-dom": "^6.27.0"
   },
   "devDependencies": {
