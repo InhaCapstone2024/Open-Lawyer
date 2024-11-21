@@ -6,6 +6,8 @@ import com.inha.springbootapp.global.util.CookieUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +21,11 @@ public class UserController {
     @GetMapping("/userinfo")
     public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String accessToken) {
         User user = userService.getUserInfo(accessToken);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Access token is required");
+        }
+
         return ResponseEntity.ok(user);
     }
 

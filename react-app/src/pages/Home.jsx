@@ -12,8 +12,9 @@ const HomePage = () => {
     if (!accessToken.getToken()) {
       // 새로고침시 리프래시 토큰으로 액세스 토큰 발급
       requestAccessTokenFromRefreshToken();
+    } else {
+      fetchUserInfo(accessToken.getToken()); // 액세스 토큰으로 사용자 정보 가져오기
     }
-    fetchUserInfo(accessToken.getToken()); // 액세스 토큰으로 사용자 정보 가져오기
   }, []);
 
   const fetchUserInfo = async (token) => {
@@ -64,8 +65,8 @@ const HomePage = () => {
       }
 
       const newToken = await response.text();
-      accessToken.setToken(newToken); // 새로운 액세스 토큰 저장
-      fetchUserInfo(newToken); // 새로운 토큰으로 사용자 정보 가져오기
+      accessToken.setToken(newToken.substring(7)); // 새로운 액세스 토큰 저장
+      fetchUserInfo(newToken.substring(7)); // 새로운 토큰으로 사용자 정보 가져오기
     } catch (error) {
       console.error(error);
       // 리프레시 토큰이 없거나 만료된 경우 로딩 완료
