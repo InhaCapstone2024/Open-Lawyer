@@ -40,6 +40,24 @@ services:
     networks:
       - inha
 
+  chatbot-app:
+    build:
+      context: ./chatbot-app
+      dockerfile: ./dockerfile
+    image: 'chatbot-service-image'
+    container_name: 'chatbot-service-container'
+    restart: always
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./chatbot-app:/chatbot-app
+    ports:
+      - ${FASTAPI_HOST_PORT}:${FASTAPI_SERVER_PORT}
+    env_file:
+      - .env
+    networks:
+      - inha
+
 networks:
   inha:
     name: inha
