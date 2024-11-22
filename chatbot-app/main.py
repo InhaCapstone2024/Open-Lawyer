@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from core.docs import *
+from router import chatbot_router
 from starlette.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 
@@ -25,6 +26,8 @@ def get_server():
     return server
 
 app = get_server()
+
+app.include_router(chatbot_router.router, tags=['Chatbot'])
 
 @app.get('/api/ping', tags=['Root'])
 def ping():
