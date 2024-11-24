@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @font-face {
   font-family: 'Pretendard-Light';
   src: url('./assets/fonts/Pretendard-Light.woff2') format('woff2');
@@ -52,6 +56,14 @@
   --red-hover: #dc2626;
   --green: #22c55e;
   --green-hover: #16a34a;
+
+  /* social login */
+  --kakao: #f7e036;
+  --kakao-hover: #dac528;
+  --naver: #1ec800;
+  --naver-hover: #1ab300;
+  --google: #db4437;
+  --google-hover: #c13527;
 
   body {
     font-family: 'Pretendard-Regular', sans-serif;
