@@ -85,7 +85,7 @@ jobs:
     # needs: ci
     steps:
       - name: Checkout code
-        if: contains(github.ref, 'main')
+        # if: contains(github.ref, 'main')
         uses: actions/checkout@v2
       
       - name: Set up JDK
@@ -146,7 +146,7 @@ jobs:
     # needs: ci
     steps:
       - name: Checkout code
-        if: contains(github.ref, 'main')
+        # if: contains(github.ref, 'main')
         uses: actions/checkout@v2
 
       - name: react-app 경로의 env 파일 생성
@@ -195,7 +195,7 @@ jobs:
     # needs: ci
     steps:
       - name: Checkout code
-        if: contains(github.ref, 'main')
+        # if: contains(github.ref, 'main')
         uses: actions/checkout@v2
 
       - name: chatbot-app 경로의 env 파일 생성
