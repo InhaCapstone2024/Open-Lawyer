@@ -204,7 +204,7 @@ jobs:
 
       - name: chatbot-app 프로젝트 빌드 -> 도커파일 생성
         working-directory: chatbot-app
-        run: docker build -t ${{ env.CHABOT_ECR_REPOSITORY }} .
+        run: docker build -t ${{ env.CHATBOT_ECR_REPOSITORY }} .
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
