@@ -59,7 +59,7 @@ dependencies {
 	// runtimeOnly 'com.h2database:h2'
 
 	// MySQL 데이터베이스
-	implementation 'mysql:mysql-connector-java'
+	implementation 'mysql:mysql-connector-java:8.0.30'
 
 	// Jackson (JSON 처리)
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
