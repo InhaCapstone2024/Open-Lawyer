@@ -1,3 +1,9 @@
+/** @jsxImportSource @emotion/react */
+import { SiKakao, SiNaver, SiGoogle } from 'react-icons/si';
+import Button from '../components/Button/Button';
+import logoImage from '../assets/images/logo-text/black.png';
+import loginImage from '../assets/images/login.png';
+
 const Login = () => {
   const kakaoClientId = import.meta.env.VITE_KAKAO_REST_API_KEY;
   const kakaoRedirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI;
@@ -25,11 +31,60 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <h1>로그인 페이지</h1>
-      <button onClick={() => handleSocialLogin('kakao')}>카카오 로그인</button>
-      <button onClick={() => handleSocialLogin('naver')}>네이버 로그인</button>
-      <button onClick={() => handleSocialLogin('google')}>구글 로그인</button>
+    <div className="flex flex-col md:flex-row justify-center items-center w-full">
+      <div className="md:w-1/2 w-full flex flex-col justify-center items-center p-4">
+        <img src={logoImage} alt="Login" className="items-start w-auto h-10 mb-4"/>
+        <h1 className="text-2xl font-bold pb-8">
+          로그인이 필요한 서비스입니다.
+        </h1>
+        <div className="flex flex-col gap-4 justify-center items-center">
+          <Button
+            onClick={() => handleSocialLogin('kakao')}
+            label={
+              <div className="flex items-center justify-center w-full">
+                <SiKakao className="mr-2 text-2xl" />
+                카카오 로그인
+              </div>
+            }
+            $backgroundcolor="var(--kakao)"
+            color="black"
+            width="20rem"
+            height="50px"
+            $hovercolor="var(--kakao-hover)"
+          />
+          <Button
+            onClick={() => handleSocialLogin('naver')}
+            label={
+              <div className="flex items-center justify-center w-full">
+                <SiNaver className="mr-2 text-2xl" />
+                네이버 로그인
+              </div>
+            }
+            $backgroundcolor="var(--naver)"
+            color="white"
+            width="20rem"
+            height="50px"
+            $hovercolor="var(--naver-hover)"
+          />
+          <Button
+            onClick={() => handleSocialLogin('google')}
+            label={
+              <div className="flex items-center justify-center w-full">
+                <SiGoogle className="mr-2 text-2xl" />
+                구글 로그인
+              </div>
+            }
+            $backgroundcolor="var(--google)"
+            color="white"
+            width="20rem"
+            height="50px"
+            $hovercolor="var(--google-hover)"
+          />
+        </div>
+      </div>
+      <div className="hidden md:block md:w-1/2">
+        <img src={loginImage} alt="Login" className="w-full h-auto" />
+      </div>
     </div>
   );
 };
