@@ -1,21 +1,12 @@
-// src/components/Layout.jsx (1-27)
 /** @jsxImportSource @emotion/react */
 import { Outlet } from 'react-router-dom';
-import { css } from '@emotion/react';
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
 import MainSection from '../components/MainSection/MainSection';
 
-const layoutStyle = css`
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  overflow: hidden;
-`;
-
 const Layout = () => {
   return (
-    <div css={layoutStyle}>
+    <div className="justify-center items-center h-screen">
       <Header />
       {/* 메인 콘텐츠 영역 */}
       <MainSection>
