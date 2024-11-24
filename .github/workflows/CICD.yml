@@ -13,7 +13,7 @@ env:
 
   # ECR
   AWS_REGION: us-east-1
-  ECR_REGISTRY: public.ecr.aws/q8a6c9h1
+  ECR_REGISTRY: 717279725295.dkr.ecr.us-east-1.amazonaws.com
   REACT_ECR_REPOSITORY: openlawyer/react
   CHATBOT_ECR_REPOSITORY: openlawyer/chatbot
   SPRINGBOOT_ECR_REPOSITORY: openlawyer/springboot
@@ -117,9 +117,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_PRIVATE_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Amazon ECR Public 로그인
-        run: |
-          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
+      - name: Amazon ECR Private 로그인
+        uses: aws-actions/amazon-ecr-login@v2
 
       - name: Tag and push Spring Boot Docker image
         run: | 
@@ -166,9 +165,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_PRIVATE_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Amazon ECR Public 로그인
-        run: |
-          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
+      - name: Amazon ECR Private 로그인
+        uses: aws-actions/amazon-ecr-login@v2
       
       - name: Tag and push React Docker image
         run: | 
@@ -215,9 +213,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_PRIVATE_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Amazon ECR Public 로그인
-        run: |
-          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
+      - name: Amazon ECR Private 로그인
+        uses: aws-actions/amazon-ecr-login@v2
       
       - name: Tag and push Chatbot Docker image
         run: | 
