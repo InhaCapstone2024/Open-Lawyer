@@ -9,7 +9,7 @@ env:
   REACT_ENV: ${{ secrets.REACT_ENV }}
   CHATBOT_ENV: ${{ secrets.CHATBOT_ENV }}
   SPRINGBOOT_ENV: ${{ secrets.SPRINGBOOT_ENV }}
-  APPLICATION_PROPERTIES: ${{ secrets.APPLTICAION_PROPERTIES }}
+  APPLICATION_YML: ${{ secrets.APPLTICAION_YML }}
 
   # ECR
   AWS_REGION: us-east-1
@@ -100,10 +100,10 @@ jobs:
           echo "${{ env.SPRINGBOOT_ENV }}" > .env
         shell: bash
 
-      - name: springboot-app 경로의 application.properties 파일 생성
+      - name: springboot-app 경로의 application.yml 파일 생성
         working-directory: springboot-app/src/main/resources
         run: |
-          echo "${{ env.APPLICATION_PROPERTIES }}" > application.properties
+          echo "${{ env.APPLICATION_YML }}" > application.yml
         shell: bash
       
       - name: springboot-app 프로젝트 빌드 -> 도커파일 생성
