@@ -9,5 +9,4 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ChatbotRequestDto {
     private String question;
-    private Long questionId;
 }
