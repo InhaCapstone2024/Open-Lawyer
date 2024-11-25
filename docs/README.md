@@ -1,9 +1,9 @@
 # 2024년 하반기 인하대학교 컴퓨터공학 종합설계 (1조) 프로젝트
 
 > Initial written at September 19, 2024 <br/>
-> last updated at: October 31, 2024
+> last updated at: November 26, 2024
 
-## Current: ver. 1.0.1<br/>
+## Current: ver. 1.0.2<br/>
 
 > - ver 1.0.0.
 >   - Init: 프로젝트 세팅 ( React + Spring Boot )
@@ -13,6 +13,9 @@
 >   - 리드미 파일 포트 수정: Vite 포트번호로 변경
 >   - rollup 패키지 최신버전으로 업데이트 -> 의존성 취약점 문제 해결
 >   - springboot-app: 소셜로그인 -> 네이버, 카카오, 구글
+> - ver 1.0.2.
+>   - react-app: 소셜로그인, 결제 페이지 구현
+>   - springboot-app: 소셜로그인 보안 개선, 법률 용어 API 구축
 
 # 1. 프로그램 (프로젝트) 설명
 

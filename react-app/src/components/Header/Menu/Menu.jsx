@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import { useNavigate } from 'react-router-dom';
 
 const MenuWrapper = css`
   display: flex;
@@ -24,11 +25,16 @@ const MenuItem = css`
 `;
 
 const Menu = () => {
+  const navigate = useNavigate();
+
   return (
     <nav>
       <ul css={MenuWrapper}>
-        <li css={MenuItem}>챗봇과 대화하기</li>
-        <li css={MenuItem}>법률 용어 사전</li>
+        <li css={MenuItem} onClick={() => navigate('/chat')}>
+          챗봇과 대화하기
+        </li>
+        <li css={MenuItem} onClick={() => navigate('/dictionary')}>법률 용어 사전</li>
+        <li css={MenuItem} onClick={() => navigate('/price')}>가격</li>
       </ul>
     </nav>
   );
