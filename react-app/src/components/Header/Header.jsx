@@ -1,10 +1,42 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from 'react';
 import { css } from '@emotion/react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from './Menu/Sidebar';
 import Menu from './Menu/Menu';
 import Button from '../Button/Button';
 import LogoImage from '../../assets/images/logo/logo.png';
+
+const Header = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const openSidebar = () => setSidebarOpen(true);
+  const closeSidebar = () => setSidebarOpen(false);
+
+  const handleLogin = () => {
+    if (location.pathname === '/login') {
+      alert('현재 페이지입니다.');
+    } else {
+      navigate('/login');
+    }
+  };
+
+  return (
+    <>
+      <Sidebar isOpen={sidebarOpen} closeSidebar={closeSidebar} />
+      <header css={HeaderWrapper}>
+        <aside css={LogoWrapper} onClick={openSidebar}>
+          <img src={LogoImage} alt="Logo" />
+          <h1>Open-Lawyer</h1>
+        </aside>
+        <Menu />
+        <Button label="로그인" onClick={handleLogin} />
+      </header>
+    </>
+  );
+};
 
 const HeaderWrapper = css`
   display: flex;
@@ -40,27 +72,5 @@ const LogoWrapper = css`
     letter-spacing: -0.04rem;
   }
 `;
-
-const Header = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  const openSidebar = () => setSidebarOpen(true);
-  const closeSidebar = () => setSidebarOpen(false);
-
-  return (
-    <>
-      <Sidebar isOpen={sidebarOpen} closeSidebar={closeSidebar} />
-      <header css={HeaderWrapper}>
-        <aside css={LogoWrapper} onClick={openSidebar}>
-          {/* 로고 부분 클릭 시 사이드바 toggle */}
-          <img src={LogoImage} alt="Logo" />
-          <h1>Open-Lawyer</h1>
-        </aside>
-        <Menu />
-        <Button label="로그인" />
-      </header>
-    </>
-  );
-};
 
 export default Header;
