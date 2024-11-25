@@ -1,5 +1,5 @@
-import Price from '../components/Price/Price';
-import Button from '../components/Button/Button';
+import Price from '../../components/Price/Price';
+import Button from '../../components/Button/Button';
 import { useNavigate } from 'react-router-dom';
 
 const features = [

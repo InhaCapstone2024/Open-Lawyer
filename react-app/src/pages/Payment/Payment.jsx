@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from 'react';
-import Pay from '../components/Pay/Pay';
+import Pay from '../../components/Pay/Pay';
 
 const Payment = () => {
   const [amount, setAmount] = useState(3900); // 결제 금액

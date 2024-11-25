@@ -1,8 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { SiKakao, SiNaver, SiGoogle } from 'react-icons/si';
-import Button from '../components/Button/Button';
-import logoImage from '../assets/images/logo-text/black.png';
-import loginImage from '../assets/images/login.png';
+import Button from '../../components/Button/Button';
+import logoImage from '../../assets/images/logo-text/black.png';
 
 const Login = () => {
   const kakaoClientId = import.meta.env.VITE_KAKAO_REST_API_KEY;
@@ -31,9 +30,13 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row justify-center items-center w-full">
-      <div className="md:w-1/2 w-full flex flex-col justify-center items-center p-4">
-        <img src={logoImage} alt="Login" className="items-start w-auto h-10 mb-4"/>
+    <div className="flex flex-col md:flex-row justify-center items-center w-full bg-white">
+      <div className="md:flex-grow md:max-w-md w-full flex flex-col justify-center items-center ">
+        <img
+          src={logoImage}
+          alt="Login"
+          className="items-start w-auto h-10 mb-4"
+        />
         <h1 className="text-2xl font-bold pb-8">
           로그인이 필요한 서비스입니다.
         </h1>
@@ -81,9 +84,6 @@ const Login = () => {
             $hovercolor="var(--google-hover)"
           />
         </div>
-      </div>
-      <div className="hidden md:block md:w-1/2">
-        <img src={loginImage} alt="Login" className="w-full h-auto" />
       </div>
     </div>
   );
