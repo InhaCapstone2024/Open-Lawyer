@@ -12,6 +12,7 @@ const ButtonWrapper = ($backgroundColor, $color, $width, $hoverColor) => css`
   cursor: pointer;
   font-size: 16px;
   width: ${$width};
+  justify-content: center;
 
   &:hover {
     background-color: ${$hoverColor};
