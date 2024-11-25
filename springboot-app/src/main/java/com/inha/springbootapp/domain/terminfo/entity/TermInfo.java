@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
-@Table(name = "TERMINFO")
+@Table(name = "TermInfo")
 public class TermInfo {
 
     @Id
@@ -15,10 +15,10 @@ public class TermInfo {
     @Column(name = "TERMNAME")
     private String termName;
 
-    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String source;
 
-    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String description;
 
 }
