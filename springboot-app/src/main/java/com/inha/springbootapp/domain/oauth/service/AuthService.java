@@ -9,6 +9,7 @@ import com.inha.springbootapp.domain.user.entity.User;
 import com.inha.springbootapp.domain.user.repository.UserRepository;
 import com.inha.springbootapp.global.util.CookieUtils;
 import com.inha.springbootapp.global.util.JwtUtil;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class AuthService {
     private final KakaoAuthUtil kakaoAuthUtil;
     private final NaverAuthUtil naverAuthUtil;
     private final GoogleAuthUtil googleAuthUtil;
+
+    private final int ACCESS_TOKEN_TIME = 60 * 60 * 1000;
+    private final int REFRESH_TOKEN_TIME = 24 * 60 * 60 * 1000;
 
     public String callback(String loginType, String code, HttpServletResponse response) throws JsonProcessingException {
         String accessToken;
@@ -63,14 +67,19 @@ public class AuthService {
     }
 
     private String createAndReturnToken(User user, HttpServletResponse response) {
-        int ACCESS_TOKEN_TIME = 60 * 60 * 1000;
-        int REFRESH_TOKEN_TIME = 24 * 60 * 60 * 1000;
-
         String accessToken = JwtUtil.createJWT(user, ACCESS_TOKEN_TIME);
         String refreshToken = JwtUtil.createJWT(user, REFRESH_TOKEN_TIME);
 
         CookieUtils.addCookie(response, "refreshToken", refreshToken, REFRESH_TOKEN_TIME);
 
         return accessToken;
+    }
+
+    public String getAccessTokenFromRefreshToken(String refreshToken) {
+        Claims claims = JwtUtil.getUserInfoFromToken(refreshToken);
+        String email = claims.get("email", String.class);
+        User user = userRepository.findByEmail(email);
+
+        return JwtUtil.createJWT(user, ACCESS_TOKEN_TIME);
     }
 }
