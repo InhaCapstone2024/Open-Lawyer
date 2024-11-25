@@ -1,22 +1,18 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from './pages/Layout';
-import Example from './components/Example';
-import Login from './pages/Login';
+import Login from './pages/Login/Login';
 import Home from './pages/Home';
-import Connect from './pages/Connect';
-import Payment from './pages/Payment';
-import PriceList from './pages/PriceList';
+import Connect from './pages/Login/Connect';
+import Chat from './pages/Chat/Chat';
+import Dictionary from './pages/Dictionary/Dictionary';
+import Payment from './pages/Payment/Payment';
+import PriceList from './pages/Payment/PriceList';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Layout />,
     children: [
-      // 추가 라우팅
-      {
-        path: 'ex',
-        element: <Example />,
-      },
       {
         path: 'home',
         element: <Home />,
@@ -36,6 +32,14 @@ const router = createBrowserRouter([
       {
         path: 'connect',
         element: <Connect />,
+      },
+      {
+        path: 'chat',
+        element: <Chat />,
+      },
+      {
+        path: 'dictionary',
+        element: <Dictionary />,
       },
     ],
   },
