@@ -36,6 +36,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => (
     </section>
     <div css={itemStyle}>챗봇과 대화하기</div>
     <div css={itemStyle}>법률 용어 사전</div>
+    <div css={itemStyle}>가격</div>
   </div>
 );
 
