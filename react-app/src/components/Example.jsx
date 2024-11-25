@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
 const Example = () => {
   const {
@@ -6,16 +6,16 @@ const Example = () => {
     error: repoError,
     data: repoData,
   } = useQuery({
-    queryKey: ["repoData"],
+    queryKey: ['repoData'],
     queryFn: () =>
-      fetch("https://api.github.com/repos/TanStack/query").then((res) =>
+      fetch('https://api.github.com/repos/TanStack/query').then((res) =>
         res.json()
       ),
   });
 
-  if (isRepoLoading) return "Loading..."; // Loading state handling
+  if (isRepoLoading) return 'Loading...'; // Loading state handling
   if (repoError)
-    return "An error has occurred with GitHub API: " + repoError.message;
+    return 'An error has occurred with GitHub API: ' + repoError.message;
 
   return (
     <>
