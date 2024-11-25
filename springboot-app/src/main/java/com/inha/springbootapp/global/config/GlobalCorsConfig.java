@@ -10,11 +10,13 @@ public class GlobalCorsConfig implements WebMvcConfigurer {
 
     Dotenv dotenv = Dotenv.load();
     private final String reactURL = "http://" + dotenv.get("IP_ADDRESS") + ":" + dotenv.get("REACT_HOST_PORT");
+    private final String chatbotURL = "http://" + dotenv.get("IP_ADDRESS") + ":" + dotenv.get("CHATBOT_HOST_PORT");
+    private final String springbootURL = "http://" + dotenv.get("IP_ADDRESS") + ":" + dotenv.get("SPRINGBOOT_HOST_PORT");
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // 모든 경로에 대해 CORS를 허용
-                .allowedOrigins(reactURL) // React 애플리케이션의 URL
+                .allowedOrigins(reactURL, chatbotURL, springbootURL) // React 애플리케이션의 URL
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // 허용할 HTTP 메서드
                 .allowedHeaders("*") // 모든 헤더 허용
                 .allowCredentials(true); // 자격 증명(쿠키 등)을 허용할지 여부

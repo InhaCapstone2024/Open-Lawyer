@@ -26,11 +26,15 @@ public class ChatbotService {
     public UserQuestionResponseDto getPrediction(ChatbotRequestDto request) {
         String chatbotUrl = chatbotBaseUrl + "/api/chatbot/prediction";
 
+        // 요청 헤더 설정
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
+        // HttpEntity 로 request body 와 headers 설정
         HttpEntity<ChatbotRequestDto> requestEntity = new HttpEntity<>(request, headers);
-        return restTemplate.exchange(chatbotUrl, HttpMethod.POST, requestEntity, UserQuestionResponseDto.class).getBody();
+
+        // POST 요청을 보내고 응답을 객체로 받음
+        return restTemplate.postForObject(chatbotUrl, requestEntity, UserQuestionResponseDto.class);
     }
 
     public ChatbotResponseDto getAnswer(ChatbotRequestDto request) {
