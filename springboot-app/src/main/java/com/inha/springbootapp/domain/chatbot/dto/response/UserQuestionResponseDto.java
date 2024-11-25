@@ -14,4 +14,5 @@ import lombok.NoArgsConstructor;
 public class UserQuestionResponseDto {
     private Double probability;
     private String answer;
+    private Long questionId;
 }
