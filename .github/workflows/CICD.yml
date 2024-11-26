@@ -125,20 +125,20 @@ jobs:
           docker tag ${{ env.SPRINGBOOT_ECR_REPOSITORY }}:latest ${{ env.ECR_REGISTRY }}/${{ env.SPRINGBOOT_ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
           docker push ${{ env.ECR_REGISTRY }}/${{ env.SPRINGBOOT_ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
 
-      # - name: 최신 Springboot 태스크 정의 가져오기
-      #   id: get-task-latest-springboot
-      #   run: |
-      #     aws ecs describe-task-definition --task-definition ${{ env.SPRINGBOOT_ECS_TASK_DEFINITION }} --query taskDefinition > ${{ env.SPRINGBOOT_ECS_TASK_DEFINITION }}.json
-      #     cat ${{ env.SPRINGBOOT_ECS_TASK_DEFINITION }}.json
-      #     echo "::set-output name=task-def-file::${{ env.SPRINGBOOT_ECS_TASK_DEFINITION }}.json"
+      - name: 최신 Springboot 태스크 정의 가져오기
+        id: get-task-latest-springboot
+        run: |
+          aws ecs describe-task-definition --task-definition ${{ env.SPRINGBOOT_ECS_TASK_DEFINITION }} --query taskDefinition > ${{ env.SPRINGBOOT_ECS_TASK_DEFINITION }}.json
+          cat ${{ env.SPRINGBOOT_ECS_TASK_DEFINITION }}.json
+          echo "::set-output name=task-def-file::${{ env.SPRINGBOOT_ECS_TASK_DEFINITION }}.json"
 
-      # - name: Amazon ECS 태스크 정의 배포 (Springboot)
-      #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      #   with:
-      #     task-definition: ${{ steps.get-task-latest-springboot.outputs.task-def-file }}
-      #     service: ${{ env.SPRINGBOOT_ECS_SERVICE }}
-      #     cluster: ${{ env.ECS_CLUSTER }}
-      #     wait-for-service-stability: true
+      - name: Amazon ECS 태스크 정의 배포 (Springboot)
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.get-task-latest-springboot.outputs.task-def-file }}
+          service: ${{ env.SPRINGBOOT_ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
 
   cd-react:
     runs-on: ubuntu-latest
@@ -173,20 +173,20 @@ jobs:
           docker tag ${{ env.REACT_ECR_REPOSITORY }}:latest ${{ env.ECR_REGISTRY }}/${{ env.REACT_ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
           docker push ${{ env.ECR_REGISTRY }}/${{ env.REACT_ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
 
-      # - name: 최신 React 태스크 정의 가져오기
-      #   id: get-task-latest-react
-      #   run: |
-      #     aws ecs describe-task-definition --task-definition ${{ env.REACT_ECS_TASK_DEFINITION }} --query taskDefinition > ${{ env.REACT_ECS_TASK_DEFINITION }}.json
-      #     cat ${{ env.REACT_ECS_TASK_DEFINITION }}.json
-      #     echo "::set-output name=task-def-file::${{ env.REACT_ECS_TASK_DEFINITION }}.json"
+      - name: 최신 React 태스크 정의 가져오기
+        id: get-task-latest-react
+        run: |
+          aws ecs describe-task-definition --task-definition ${{ env.REACT_ECS_TASK_DEFINITION }} --query taskDefinition > ${{ env.REACT_ECS_TASK_DEFINITION }}.json
+          cat ${{ env.REACT_ECS_TASK_DEFINITION }}.json
+          echo "::set-output name=task-def-file::${{ env.REACT_ECS_TASK_DEFINITION }}.json"
 
-      # - name: Amazon ECS 태스크 정의 배포 (React)
-      #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      #   with:
-      #     task-definition: ${{ steps.get-task-latest-react.outputs.task-def-file }}
-      #     service: ${{ env.REACT_ECS_SERVICE }}
-      #     cluster: ${{ env.ECS_CLUSTER }}
-      #     wait-for-service-stability: true
+      - name: Amazon ECS 태스크 정의 배포 (React)
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.get-task-latest-react.outputs.task-def-file }}
+          service: ${{ env.REACT_ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
 
   cd-chatbot:
     runs-on: ubuntu-latest
@@ -221,17 +221,17 @@ jobs:
           docker tag ${{ env.CHATBOT_ECR_REPOSITORY }}:latest ${{ env.ECR_REGISTRY }}/${{ env.CHATBOT_ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
           docker push ${{ env.ECR_REGISTRY }}/${{ env.CHATBOT_ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
 
-      # - name: 최신 Chatbot 태스크 정의 가져오기
-      #   id: get-task-latest-chatbot
-      #   run: |
-      #     aws ecs describe-task-definition --task-definition ${{ env.CHATBOT_ECS_TASK_DEFINITION }} --query taskDefinition > ${{ env.CHATBOT_ECS_TASK_DEFINITION }}.json
-      #     cat ${{ env.CHATBOT_ECS_TASK_DEFINITION }}.json
-      #     echo "::set-output name=task-def-file::${{ env.CHATBOT_ECS_TASK_DEFINITION }}.json"
+      - name: 최신 Chatbot 태스크 정의 가져오기
+        id: get-task-latest-chatbot
+        run: |
+          aws ecs describe-task-definition --task-definition ${{ env.CHATBOT_ECS_TASK_DEFINITION }} --query taskDefinition > ${{ env.CHATBOT_ECS_TASK_DEFINITION }}.json
+          cat ${{ env.CHATBOT_ECS_TASK_DEFINITION }}.json
+          echo "::set-output name=task-def-file::${{ env.CHATBOT_ECS_TASK_DEFINITION }}.json"
 
-      # - name: Amazon ECS 태스크 정의 배포 (chatbot)
-      #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      #   with:
-      #     task-definition: ${{ steps.get-task-latest-chatbot.outputs.task-def-file }}
-      #     service: ${{ env.CHATBOT_ECS_SERVICE }}
-      #     cluster: ${{ env.ECS_CLUSTER }}
-      #     wait-for-service-stability: true
+      - name: Amazon ECS 태스크 정의 배포 (chatbot)
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.get-task-latest-chatbot.outputs.task-def-file }}
+          service: ${{ env.CHATBOT_ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
