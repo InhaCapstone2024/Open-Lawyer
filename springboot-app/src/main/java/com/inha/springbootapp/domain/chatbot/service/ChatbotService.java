@@ -38,17 +38,20 @@ public class ChatbotService {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<UserQuestionRequestDto> requestEntity = new HttpEntity<>(request, headers);
-        UserQuestionResponseDto userQuestionResponseDto = restTemplate.exchange(chatbotUrl, HttpMethod.POST, requestEntity, UserQuestionResponseDto.class).getBody();
+
 
         User findUser = userService.getUserInfo(accessToken);
         findUser.decreaseQuestionCount();
 
-        chatbotRepository.save(Question.builder()
+        Question savedQuestion = chatbotRepository.save(Question.builder()
                 .user(findUser)
-                .winPercentage(userQuestionResponseDto.getProbability())
+                .winPercentage(restTemplate.exchange(chatbotUrl, HttpMethod.POST, requestEntity, UserQuestionResponseDto.class).getBody().getProbability())
                 .build());
 
-        return userQuestionResponseDto;
+        return UserQuestionResponseDto.builder()
+                .probability(savedQuestion.getWinPercentage())
+                .questionId(savedQuestion.getId())
+                .build();
     }
 
     public ChatbotResponseDto getAnswer(ChatbotRequestDto request, String accessToken) {
