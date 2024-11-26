@@ -41,9 +41,10 @@ public class User extends Timestamped {
     public void decreaseQuestionCount(){
         int restCount = questionCount - 1;
 
-        if(questionCount < 0) {
+        if(restCount < 0) {
             throw new NotEnoughQuestionCountException("질문 차감 횟수가 부족합니다.");
         }
+
         this.questionCount = restCount;
     }
 
