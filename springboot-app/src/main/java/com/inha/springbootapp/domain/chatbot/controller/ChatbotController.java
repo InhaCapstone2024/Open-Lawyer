@@ -22,7 +22,7 @@ public class ChatbotController {
         return ResponseEntity.ok(userQuestionResponseDto);
     }
 
-    @PostMapping("/qustion")
+    @PostMapping("/question")
     public ResponseEntity<ChatbotResponseDto> getAnswer(@RequestBody ChatbotRequestDto chatbotRequestDto, @RequestHeader("Authorization") String accessToken) {
         ChatbotResponseDto chatbotResponseDto = chatbotService.getAnswer(chatbotRequestDto, accessToken);
         return ResponseEntity.ok(chatbotResponseDto);
