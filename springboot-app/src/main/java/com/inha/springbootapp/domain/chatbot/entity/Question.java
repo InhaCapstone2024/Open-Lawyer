@@ -30,10 +30,6 @@ public class Question extends Timestamped {
     @Column(nullable = false)
     private Double winPercentage;
 
-    @Column(nullable = false)
-    private Integer questionCount;
-
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String similarCase;
-
 }
