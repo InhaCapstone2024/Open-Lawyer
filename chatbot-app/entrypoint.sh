@@ -2,12 +2,14 @@
 if [ ! -d /fastapi-app/venv ]; then \
     echo "[INFO] >> Installing dependencies, please wait..." && \
     python -m venv venv && \
-    source venv/bin/activate && \
+    . venv/bin/activate && \
+    pip install --upgrade pip && \
     pip install -r requirements.txt && \
     pip freeze > requirements.txt \
 ;else \
     echo "[INFO] >> Ready to launch server, checking new dependencies, please wait..." && \
-    source venv/bin/activate && \
+    . venv/bin/activate && \
+    pip install --upgrade pip && \
     pip install -r requirements.txt && \
     pip freeze > requirements.txt \
 ;fi

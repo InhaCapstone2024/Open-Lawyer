@@ -1,44 +1,44 @@
 services:
-  react-app:
-    build:
-      context: ./react-app
-      # dockerfile : Dockerfile       # 배포용 도커 파일
-      dockerfile : dockerfile.dev   # 개발용 도커 파일
-    image: 'react-image:latest'
-    container_name: 'react-container'
-    restart: always
-    stdin_open: true
-    tty: true
-    volumes:
-      - ./react-app/src:/react-app/src
-    depends_on:
-      - springboot-app
-    ports:
-      - ${REACT_HOST_PORT}:${REACT_SERVER_PORT}
-    env_file:
-      - ./react-app/.env
-    networks:
-      - inha
+  # react-app:
+  #   build:
+  #     context: ./react-app
+  #     # dockerfile : Dockerfile       # 배포용 도커 파일
+  #     dockerfile : dockerfile.dev   # 개발용 도커 파일
+  #   image: 'react-image:latest'
+  #   container_name: 'react-container'
+  #   restart: always
+  #   stdin_open: true
+  #   tty: true
+  #   volumes:
+  #     - ./react-app/src:/react-app/src
+  #   depends_on:
+  #     - springboot-app
+  #   ports:
+  #     - ${REACT_HOST_PORT}:${REACT_SERVER_PORT}
+  #   env_file:
+  #     - ./react-app/.env
+  #   networks:
+  #     - inha
 
-  springboot-app:
-    build:
-      context: ./springboot-app
-      # dockerfile : Dockerfile         # 배포용 도커 파일
-      dockerfile : ./dockerfile.dev   # 개발용 도커 파일
-    image: 'springboot-image:latest'
-    container_name: 'springboot-container'
-    restart: always
-    stdin_open: true
-    tty: true
-    volumes:
-      - ./springboot-app:/springboot-app
-      - ./springboot-app/.env:/.env
-    ports:
-      - ${SPRINGBOOT_HOST_PORT}:${SPRINGBOOT_SERVER_PORT}
-    env_file:
-      - ./springboot-app/.env
-    networks:
-      - inha
+  # springboot-app:
+  #   build:
+  #     context: ./springboot-app
+  #     # dockerfile : Dockerfile         # 배포용 도커 파일
+  #     dockerfile : ./dockerfile.dev   # 개발용 도커 파일
+  #   image: 'springboot-image:latest'
+  #   container_name: 'springboot-container'
+  #   restart: always
+  #   stdin_open: true
+  #   tty: true
+  #   volumes:
+  #     - ./springboot-app:/springboot-app
+  #     - ./springboot-app/.env:/.env
+  #   ports:
+  #     - ${SPRINGBOOT_HOST_PORT}:${SPRINGBOOT_SERVER_PORT}
+  #   env_file:
+  #     - ./springboot-app/.env
+  #   networks:
+  #     - inha
 
   chatbot-app:
     build:
@@ -55,6 +55,10 @@ services:
       - ${FASTAPI_HOST_PORT}:${FASTAPI_SERVER_PORT}
     env_file:
       - .env
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
     networks:
       - inha
 
