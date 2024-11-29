@@ -6,7 +6,9 @@ import MainSection from '../components/MainSection/MainSection';
 
 const Layout = () => {
   return (
-    <div className="justify-center items-center h-screen">
+    <div
+      className="justify-center items-center min-h-screen min-w-320"
+    >
       <Header />
       {/* 메인 콘텐츠 영역 */}
       <MainSection>
