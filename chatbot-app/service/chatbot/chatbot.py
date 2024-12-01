@@ -1,18 +1,22 @@
 import os
 import torch
 import pymysql
+import boto3
 
-from tqdm.notebook import tqdm
 from transformers import AutoTokenizer, AutoModel
 from langchain_aws import ChatBedrock
-from pinecone import Pinecone, ServerlessSpec
+from pinecone import Pinecone
 
 # chatbot 호출 함수
 def bedrock_chatbot(input_text):
+    client = boto3.client('bedrock-runtime',
+        region_name=os.environ.get('AWS_DEFAULT_REGION'),
+        aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
+        aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY')    
+    )
     bedrock_llm = ChatBedrock(
-        # awscli로 설정 필요
-        credentials_profile_name='default',
         model_id='anthropic.claude-3-5-sonnet-20240620-v1:0',
+        client=client,
         model_kwargs= {
             "temperature": 0.5,
             "top_p": 1,
