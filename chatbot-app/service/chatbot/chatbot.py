@@ -23,7 +23,7 @@ def bedrock_chatbot(input_text):
 # Find similar vectors from Pinecone
 def find_similar_vecs(embedding):
     # Pinecone setting
-    PC_API_KEY = os.environ.get('PINECONE_API_KEY')
+    PC_API_KEY = os.environ.get('PINECONE_API_KEY', '').strip()
     pc = Pinecone(api_key=PC_API_KEY)
     index_name = 'courtcase'
     index = pc.Index(index_name)
@@ -44,10 +44,10 @@ def find_similar_vecs(embedding):
 def find_similar_cases(similar_ids):
     # MySQL 연결
     connection = pymysql.connect(
-        host=os.environ.get('MYSQL_HOSTNAME'),
-        user=os.environ.get('MYSQL_USERNAME'),
-        password=os.environ.get('MYSQL_PASSWORD'),
-        database=os.environ.get('MYSQL_DATABASE')
+        host=os.environ.get('MYSQL_HOSTNAME').strip(),
+        user=os.environ.get('MYSQL_USERNAME').strip(),
+        password=os.environ.get('MYSQL_PASSWORD').strip(),
+        database=os.environ.get('MYSQL_DATABASE').strip()
     )
 
     # ID를 기반으로 원본 텍스트 조회

@@ -2,7 +2,7 @@ import numpy as np
 import torch
 from transformers import AutoTokenizer, AutoModel
 
-from service.prob_service import networks
+from service.prob import networks
 
 class Dataset:
     def __init__(self, data): 
@@ -71,7 +71,7 @@ def cal_prob(input: str):
         
     #model.cuda()
     model.eval()
-    model.load_state_dict(torch.load(f'./models/infer_prob_model.pth'))
+    model.load_state_dict(torch.load(f'./service/prob/models/infer_prob_model.pth'))
 
     first, second, fact = test_dataset[0]
 

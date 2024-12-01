@@ -1,4 +1,4 @@
-from service.prob_service.infer import cal_prob
+from service.prob.infer import cal_prob
 from service.chatbot.chatbot import get_answer
 
 def cal_probability(question: str):
