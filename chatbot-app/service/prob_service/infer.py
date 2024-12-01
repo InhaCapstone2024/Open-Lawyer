@@ -2,7 +2,7 @@ import numpy as np
 import torch
 from transformers import AutoTokenizer, AutoModel
 
-import networks
+from service.prob_service import networks
 
 class Dataset:
     def __init__(self, data): 

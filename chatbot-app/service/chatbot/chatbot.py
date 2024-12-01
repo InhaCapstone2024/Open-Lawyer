@@ -92,7 +92,7 @@ def get_answer(input: str):
     prompt = find_similar_cases(similar_ids)
 
     # bedrock_chatbot 함수에 사용자 입력 전달
-    response = bedrock_chatbot(f'{prompt} 위의 판결문들을 참고한 다음, 다음 문장에서 주어지는 상황을 단계별로 분석한 뒤, 
-                                최종적으로 내가 무죄일지 아닐지 알려줘. 상황:{input}').content
+    response = bedrock_chatbot(f'{prompt} 위의 판결문들을 참고한 다음, 다음 문장에서 주어지는 상황을 단계별로 분석한 뒤, '
+                                + f'최종적으로 내가 무죄일지 아닐지 알려줘. 상황:{input}').content
 
     return response
