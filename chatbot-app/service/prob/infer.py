@@ -35,9 +35,8 @@ def cal_prob(input: str):
     facts = input.replace('\n', ' ')
     
     # KoBERT 호출
-    model_name = 'monologg/kobert'
-    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
-    model = AutoModel.from_pretrained(model_name, trust_remote_code=True)
+    tokenizer = AutoTokenizer.from_pretrained('./service/KoBERT', trust_remote_code=True)
+    model = AutoModel.from_pretrained('./service/KoBERT', trust_remote_code=True)
 
     #device = torch.device('cuda:0')
     #model = model.to(device)
@@ -71,7 +70,7 @@ def cal_prob(input: str):
         
     #model.cuda()
     model.eval()
-    model.load_state_dict(torch.load(f'./service/prob/models/infer_prob_model.pth'))
+    model.load_state_dict(torch.load(f'./service/prob/models/infer_prob_model.pth', map_location=torch.device('cpu')))
 
     first, second, fact = test_dataset[0]
 
@@ -86,5 +85,5 @@ def cal_prob(input: str):
         
         # 피고인 (user) 승소 확률 return
         # prob[0] -> 검사 승일 확률, prob[1] -> 피고인 승일 확률
-        return prob[1]
+        return {'probability': prob[1]}
     

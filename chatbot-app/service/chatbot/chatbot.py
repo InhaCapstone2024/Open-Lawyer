@@ -32,7 +32,7 @@ def find_similar_vecs(embedding):
     results = index.query(
         namespace="ns1",
         vector=embedding.tolist(),
-        top_k=10,
+        top_k=3,
         include_metadata=False
     )
 
@@ -77,9 +77,8 @@ def get_answer(input: str):
     '''
     
     # Create Embedding for query
-    model_name = 'monologg/kobert'
-    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
-    model = AutoModel.from_pretrained(model_name, trust_remote_code=True)
+    tokenizer = AutoTokenizer.from_pretrained('./service/KoBERT', trust_remote_code=True)
+    model = AutoModel.from_pretrained('./service/KoBERT', trust_remote_code=True)
     model.eval()
 
     input = input.replace('\n', ' ')  
@@ -92,7 +91,6 @@ def get_answer(input: str):
     prompt = find_similar_cases(similar_ids)
 
     # bedrock_chatbot 함수에 사용자 입력 전달
-    response = bedrock_chatbot(f'{prompt} 위의 판결문들을 참고한 다음, 다음 문장에서 주어지는 상황을 단계별로 분석한 뒤, '
-                                + f'최종적으로 내가 무죄일지 아닐지 알려줘. 상황:{input}').content
+    response = bedrock_chatbot(f'{prompt} 위의 판결문들을 참고한 다음, 다음 문장에서 주어지는 상황을 단계별로 분석한 뒤, 최종적으로 내가 무죄일지 아닐지 알려줘. 상황:{input}').content
 
-    return response
+    return {'answer': response}
