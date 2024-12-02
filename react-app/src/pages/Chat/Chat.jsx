@@ -1,10 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { fetchPrediction, fetchChatAnswer } from '../../apis/chat';
-import { Pie } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import GraphRenderer from '../../components/GraphRenderer/GraphRenderer';
+import MarkdownRenderer from '../../components/MarkdownRenderer/MarkdownRenderer';
 import { FaSpinner } from 'react-icons/fa';
-
-ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Chat = () => {
   const [messages, setMessages] = useState([
@@ -48,31 +46,11 @@ const Chat = () => {
       const rawProbability = predictionResponse.probability;
       const probability = Math.round(rawProbability * 100);
 
-      // 1. 승소확률 예측 파이 그래프
       const aiMessage = {
         user: 'AI',
-        text: `예상 승소 확률은 ${probability}%입니다.`,
-        jsx: (
-          <div className="flex flex-col items-center">
-            <p>예상 승소 확률은 {probability}%입니다.</p>
-            <div className="w-56 h-56">
-              <Pie
-                data={{
-                  labels: ['승소 확률', '패소 확률'],
-                  datasets: [
-                    {
-                      data: [probability, 100 - probability],
-                      backgroundColor: ['#5A85DA', '#EF4444'],
-                    },
-                  ],
-                }}
-              />
-            </div>
-          </div>
-        ),
+        jsx: <GraphRenderer probability={probability} />,
       };
 
-      // 2. 답변 출력 API 호출
       setMessages((prev) => [...prev, aiMessage]);
     } catch (error) {
       console.error('승소 확률 API 오류:', error);
@@ -92,7 +70,7 @@ const Chat = () => {
       const answerResponse = await fetchChatAnswer(input);
       const aiMessage = {
         user: 'AI',
-        text: answerResponse.answer.replace(/\n/g, '\n'),
+        jsx: <MarkdownRenderer markdown={answerResponse.answer} />,
       };
 
       setMessages((prev) => [...prev, aiMessage]);
@@ -126,7 +104,7 @@ const Chat = () => {
                     : 'bg-gray-200 text-black'
                 }`}
               >
-                {msg.jsx || msg.text} {/* JSX(그래프)부터 우선 렌더링 */}
+                {msg.jsx || msg.text} {/* JSX(그래프)가 있으면 우선 렌더링 */}
               </div>
             </div>
           ))}
