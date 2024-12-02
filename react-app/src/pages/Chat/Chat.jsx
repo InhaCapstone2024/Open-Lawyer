@@ -1,14 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { fetchPrediction, fetchChatAnswer } from '../../apis/chat'; // API 연결
+import { fetchPrediction, fetchChatAnswer } from '../../apis/chat';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { FaSpinner } from 'react-icons/fa';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Chat = () => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    {
+      user: 'AI',
+      text: '안녕하세요. 당신만을 위한 법률 상담 서비스 오픈로이어입니다! 어떤 문제로 어려움을 겪고 계신가요?',
+    },
+  ]);
   const [inputMessage, setInputMessage] = useState('');
-  const [probability, setProbability] = useState(null);
+  const [isPredictionLoading, setIsPredictionLoading] = useState(false);
+  const [isAnswerLoading, setIsAnswerLoading] = useState(false);
 
   const messagesEndRef = useRef(null);
 
@@ -27,44 +34,77 @@ const Chat = () => {
 
     const userMessage = { user: 'User', text: inputMessage };
     setMessages((prev) => [...prev, userMessage]);
-
-    // 승소확률 API 호출
-    const predictionResponse = await fetchPrediction(inputMessage);
-    const probability = predictionResponse.probability;
-    setProbability(probability);
-
-    // 1. 승소확률 예측 파이 그래프
-    const aiMessage1 = {
-      user: 'AI',
-      text: (
-        <div className="flex flex-col items-center">
-          <p>예상 승소 확률은 {probability}%입니다.</p>
-          <div className="w-56 h-56">
-            <Pie
-              data={{
-                labels: ['승소 확률', '패소 확률'],
-                datasets: [
-                  {
-                    data: [probability, 100 - probability],
-                    backgroundColor: ['#5A85DA', '#EF4444'],
-                  },
-                ],
-              }}
-            />
-          </div>
-        </div>
-      ),
-    };
-
-    // 2. 답변 출력 API 호출
-    const answerResponse = await fetchChatAnswer(inputMessage);
-    const aiMessage2 = {
-      user: 'AI',
-      text: answerResponse.answer.replace(/\n/g, '\n'),
-    };
-
-    setMessages((prev) => [...prev, aiMessage1, aiMessage2]);
     setInputMessage('');
+
+    handlePredictionAPI(inputMessage);
+    handleChatAnswerAPI(inputMessage);
+  };
+
+  // 승소 확률 API 호출
+  const handlePredictionAPI = async (input) => {
+    setIsPredictionLoading(true);
+    try {
+      const predictionResponse = await fetchPrediction(input);
+      const rawProbability = predictionResponse.probability;
+      const probability = Math.round(rawProbability * 100);
+
+      // 1. 승소확률 예측 파이 그래프
+      const aiMessage = {
+        user: 'AI',
+        text: `예상 승소 확률은 ${probability}%입니다.`,
+        jsx: (
+          <div className="flex flex-col items-center">
+            <p>예상 승소 확률은 {probability}%입니다.</p>
+            <div className="w-56 h-56">
+              <Pie
+                data={{
+                  labels: ['승소 확률', '패소 확률'],
+                  datasets: [
+                    {
+                      data: [probability, 100 - probability],
+                      backgroundColor: ['#5A85DA', '#EF4444'],
+                    },
+                  ],
+                }}
+              />
+            </div>
+          </div>
+        ),
+      };
+
+      // 2. 답변 출력 API 호출
+      setMessages((prev) => [...prev, aiMessage]);
+    } catch (error) {
+      console.error('승소 확률 API 오류:', error);
+      setMessages((prev) => [
+        ...prev,
+        { user: 'AI', text: '승소 확률을 가져오는 데 실패했습니다.' },
+      ]);
+    } finally {
+      setIsPredictionLoading(false);
+    }
+  };
+
+  // 답변 API 호출
+  const handleChatAnswerAPI = async (input) => {
+    setIsAnswerLoading(true);
+    try {
+      const answerResponse = await fetchChatAnswer(input);
+      const aiMessage = {
+        user: 'AI',
+        text: answerResponse.answer.replace(/\n/g, '\n'),
+      };
+
+      setMessages((prev) => [...prev, aiMessage]);
+    } catch (error) {
+      console.error('api 2 err:', error);
+      setMessages((prev) => [
+        ...prev,
+        { user: 'AI', text: '답변을 가져오는 데 실패했습니다.' },
+      ]);
+    } finally {
+      setIsAnswerLoading(false);
+    }
   };
 
   return (
@@ -86,15 +126,19 @@ const Chat = () => {
                     : 'bg-gray-200 text-black'
                 }`}
               >
-                {typeof msg.text === 'string' ? (
-                  msg.text
-                ) : (
-                  <div dangerouslySetInnerHTML={{ __html: msg.text }} />
-                )}
+                {msg.jsx || msg.text} {/* JSX(그래프)부터 우선 렌더링 */}
               </div>
             </div>
           ))}
           <div ref={messagesEndRef} />
+
+          {/* 로딩 상태 표시 */}
+          {(isPredictionLoading || isAnswerLoading) && (
+            <div className="flex justify-center items-center">
+              <FaSpinner className="animate-spin text-gray-700 text-2xl" />
+              <span className="ml-2">답변을 생성 중입니다...</span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -107,10 +151,12 @@ const Chat = () => {
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder="메시지를 입력하세요..."
             className="flex-1 p-2 border border-gray-400 rounded-l-lg text-gray-700"
+            disabled={isPredictionLoading || isAnswerLoading}
           />
           <button
             type="submit"
             className="p-3 bg-blue-500 text-white rounded-r-lg flex-shrink-0"
+            disabled={isPredictionLoading || isAnswerLoading}
           >
             전송
           </button>

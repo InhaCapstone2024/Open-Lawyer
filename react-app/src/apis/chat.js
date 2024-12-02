@@ -10,9 +10,6 @@ export const fetchPrediction = async (question) => {
     body: JSON.stringify({ question }),
   });
   if (!response.ok) {
-    return { probability: 77.7 };
-  }
-  if (!response.ok) {
     throw new Error('Failed to fetch winning-rate', response.error);
   }
   return response.json();
