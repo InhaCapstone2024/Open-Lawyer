@@ -1,28 +1,37 @@
-import React, { useState, useEffect } from 'react';
-
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import MarkdownRenderer from '../../components/MarkdownRenderer/MarkdownRenderer';
 import GraphRenderer from '../../components/GraphRenderer/GraphRenderer';
 
 const Compare = () => {
-  const MessageContainer = ({ isUser, children }) => (
-    <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4`}>
-      <div
-        className={`
-          max-w-[85%] 
-          px-4 
-          py-2 
-          rounded-2xl 
-          ${
+  const MessageContainer = ({ isUser, children }) => {
+    // 초기 마운트 시 애니메이션 실행을 위한 상태 관리
+    const [hasAnimated, setHasAnimated] = useState(false);
+
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 70 }} // 초기 상태
+        animate={hasAnimated ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }} // 상태에 따라 다르게 애니메이션
+        transition={{ duration: 1 }}
+        onViewportEnter={() => {
+          if (!hasAnimated) {
+            setHasAnimated(true); // 마운트 상태 변경 처리
+          }
+        }}
+        className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4`}
+      >
+        <div
+          className={`max-w-[85%] px-4 py-2 rounded-2xl ${
             isUser
               ? 'bg-blue-500 text-white rounded-tr-none'
               : 'bg-gray-200 text-black rounded-tl-none'
-          }
-        `}
-      >
-        {children}
-      </div>
-    </div>
-  );
+          }`}
+        >
+          {children}
+        </div>
+      </motion.div>
+    );
+  };
 
   const openLawyerAnalysis = `## 주어진 상황을 단계별로 분석해보겠습니다:
 
