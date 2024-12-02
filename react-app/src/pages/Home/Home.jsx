@@ -1,9 +1,10 @@
 import React from 'react';
-import Button from '../components/Button/Button';
+import Button from '../../components/Button/Button';
 import { useNavigate } from 'react-router-dom';
-import beforeImage from '../assets/images/before.png';
-import afterImage from '../assets/images/after.png';
-import mockupImage from '../assets/images/mockup.png';
+import beforeImage from '../../assets/images/before.png';
+import afterImage from '../../assets/images/after.png';
+import mockupImage from '../../assets/images/mockup.png';
+import Compare from './Compare';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -32,28 +33,7 @@ const Home = () => {
       </div>
 
       {/* 중단 섹션 */}
-      <div className="flex flex-col justify-between items-center w-full px-4 sm:px-10 lg:px-15 ">
-        <div className="text-base flex flex-col items-left">
-          <p className="text-base sm:text-lg lg:text-xl font-semibold text-gray-800">
-            💬 GPT 3.5 버전의 답변입니다.
-          </p>
-          <img
-            src={beforeImage}
-            alt="before"
-            className="mt-4 w-full max-w-md lg:max-w-xl object-contain"
-          />
-        </div>
-        <div className="text-base flex flex-col items-left mt-12">
-          <p className="text-base sm:text-lg lg:text-xl font-semibold text-gray-800">
-            💬 Open-Lawyer의 답변입니다.
-          </p>
-          <img
-            src={afterImage}
-            alt="after"
-            className="mt-4 w-full max-w-md lg:max-w-xl object-contain mb-20"
-          />
-        </div>
-      </div>
+      <Compare />
 
       {/* 하단 섹션 */}
       <div className="w-full flex flex-col lg:flex-row justify-between items-center mb-10 mt-10 lg:pl-20">
