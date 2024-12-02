@@ -10,9 +10,9 @@ from pinecone import Pinecone
 # chatbot 호출 함수
 def bedrock_chatbot(input_text):
     client = boto3.client('bedrock-runtime',
-        region_name=os.environ.get('AWS_DEFAULT_REGION'),
-        aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
-        aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY')    
+        region_name=os.environ.get('AWS_DEFAULT_REGION', '').strip(),
+        aws_access_key_id = os.environ.get('AWS_ACCESS_KEY_ID', '').strip(),
+        aws_secret_access_key = os.environ.get('AWS_SECRET_ACCESS_KEY', '').strip()    
     )
     bedrock_llm = ChatBedrock(
         model_id='anthropic.claude-3-5-sonnet-20240620-v1:0',
@@ -95,6 +95,6 @@ def get_answer(input: str):
     prompt = find_similar_cases(similar_ids)
 
     # bedrock_chatbot 함수에 사용자 입력 전달
-    response = bedrock_chatbot(f'{prompt} 위의 판결문들을 참고한 다음, 다음 문장에서 주어지는 상황을 단계별로 분석한 뒤, 최종적으로 내가 무죄일지 아닐지 알려줘. 상황:{input}').content
+    response = bedrock_chatbot(f'{prompt} 위의 판결문들을 참고한 다음, 다음 문장에서 주어지는 상황을 단계별로 분석한 뒤, 최종적으로 내가 무죄일지 아닐지 알려줘. 상황:{input}. 답변은 마크다운 형식으로 줘.').content
 
     return {'answer': response}
