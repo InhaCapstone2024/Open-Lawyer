@@ -81,8 +81,9 @@ def get_answer(input: str):
     '''
     
     # Create Embedding for query
-    tokenizer = AutoTokenizer.from_pretrained('./service/KoBERT', trust_remote_code=True)
-    model = AutoModel.from_pretrained('./service/KoBERT', trust_remote_code=True)
+    model_name = 'monologg/kobert'
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+    model = AutoModel.from_pretrained(model_name, trust_remote_code=True)
     model.eval()
 
     input = input.replace('\n', ' ')  
