@@ -27,7 +27,7 @@ services:
       dockerfile : ./dockerfile.dev   # 개발용 도커 파일
     image: 'springboot-image:latest'
     container_name: 'springboot-container'
-    restart: always
+    #restart: always
     stdin_open: true
     tty: true
     volumes:
@@ -37,6 +37,28 @@ services:
       - ${SPRINGBOOT_HOST_PORT}:${SPRINGBOOT_SERVER_PORT}
     env_file:
       - ./springboot-app/.env
+    networks:
+      - inha
+
+  chatbot-app:
+    build:
+      context: ./chatbot-app
+      dockerfile: ./dockerfile
+    image: 'chatbot-service-image'
+    container_name: 'chatbot-service-container'
+    restart: always
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./chatbot-app:/chatbot-app
+    ports:
+      - ${FASTAPI_HOST_PORT}:${FASTAPI_SERVER_PORT}
+    env_file:
+      - .env
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
     networks:
       - inha
 

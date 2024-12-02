@@ -1,0 +1,21 @@
+# python:3.9-slim 사용
+FROM python:3.9-slim
+
+# 패키지 업데이트 및 의존성 설치
+RUN apt-get update && apt-get upgrade -y \
+    && apt-get install -y python3-dev build-essential libssl-dev libffi-dev \
+    && apt-get install -y pkg-config libmariadb-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# 작업 디렉토리 설정
+WORKDIR /chatbot-app
+
+# 요구 사항 파일 복사
+COPY requirements.txt ./
+COPY entrypoint.sh ./
+
+# 실행 권한 부여 (필요한 경우)
+RUN chmod +x entrypoint.sh
+
+# entrypoint.sh 실행
+ENTRYPOINT ["sh", "./entrypoint.sh"]
