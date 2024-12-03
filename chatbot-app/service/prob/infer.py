@@ -35,8 +35,9 @@ def cal_prob(input: str):
     facts = input.replace('\n', ' ')
     
     # KoBERT 호출
-    tokenizer = AutoTokenizer.from_pretrained('./service/KoBERT', trust_remote_code=True)
-    model = AutoModel.from_pretrained('./service/KoBERT', trust_remote_code=True)
+    model_name = 'monologg/kobert'
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+    model = AutoModel.from_pretrained(model_name, trust_remote_code=True)
 
     #device = torch.device('cuda:0')
     #model = model.to(device)
