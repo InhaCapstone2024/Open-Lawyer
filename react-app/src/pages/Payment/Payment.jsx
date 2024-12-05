@@ -1,14 +1,24 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from 'react';
 import Pay from '../../components/Pay/Pay';
+import useFetchUserInfo from '../../hooks/useFetchUserInfo';
 
 const Payment = () => {
   const [amount, setAmount] = useState(3900); // 결제 금액
-  const [buyerName, setBuyerName] = useState('김인하'); // 구매자 이름
+  const [buyerName, setBuyerName] = useState(''); // 구매자 이름
 
   // IAMPORT 환경 변수
   const IMP_ID = import.meta.env.VITE_IAMPORT_IMP;
   const IAMPORT_PG = import.meta.env.VITE_IAMPORT_PG;
+
+  // 사용자 정보 가져오기
+  const { userInfo, loading } = useFetchUserInfo();
+
+  useEffect(() => {
+    if (userInfo && !loading) {
+      setBuyerName(userInfo.nickname || '김인하');
+    }
+  }, [userInfo, loading]);
 
   const requestPayment = () => {
     // IAMPORT 설정
