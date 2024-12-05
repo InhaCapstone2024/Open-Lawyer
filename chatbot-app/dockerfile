@@ -13,6 +13,7 @@ WORKDIR /chatbot-app
 # 요구 사항 파일 복사
 COPY requirements.txt ./
 COPY entrypoint.sh ./
+COPY .env ./
 
 # 실행 권한 부여 (필요한 경우)
 RUN chmod +x entrypoint.sh
