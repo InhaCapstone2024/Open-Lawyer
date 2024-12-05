@@ -9,7 +9,7 @@ env:
   REACT_ENV: ${{ secrets.REACT_ENV }}
   CHATBOT_ENV: ${{ secrets.CHATBOT_ENV }}
   SPRINGBOOT_ENV: ${{ secrets.SPRINGBOOT_ENV }}
-  APPLICATION_YML: ${{ secrets.APPLTICAION_YML }}
+  APPLICATION_YML: ${{ secrets.APPLICAION_YML }}
 
   # ECR
   AWS_REGION: us-east-1
