@@ -55,8 +55,7 @@ dependencies {
 	// validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-	// H2 데이터베이스: Spring Boot 내장 데이터 베이스
-	runtimeOnly 'com.h2database:h2'
+	implementation 'mysql:mysql-connector-java:8.0.30'
 
 	// Jackson (JSON 처리)
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
