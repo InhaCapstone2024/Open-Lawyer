@@ -1,0 +1,187 @@
+name: CICD
+
+on:
+  push:
+    branches:
+      - main
+env:
+  # Setting
+  REACT_ENV: ${{ secrets.REACT_ENV }}
+  CHATBOT_ENV: ${{ secrets.CHATBOT_ENV }}
+  SPRINGBOOT_ENV: ${{ secrets.SPRINGBOOT_ENV }}
+  APPLICATION_YML: ${{ secrets.APPLTICAION_YML }}
+
+  # ECR
+  AWS_REGION: us-east-1
+  ECR_REGISTRY: 717279725295.dkr.ecr.us-east-1.amazonaws.com
+  REACT_ECR_REPOSITORY: openlawyer/react
+  CHATBOT_ECR_REPOSITORY: openlawyer/chatbot
+  SPRINGBOOT_ECR_REPOSITORY: openlawyer/springboot
+  IMAGE_TAG: latest
+
+  # ECS
+  ECS_CLUSTER: OpenLawyer-cicd-cluster
+  REACT_ECS_TASK_DEFINITION: OpenLawyer-task-react
+  CHATBOT_ECS_TASK_DEFINITION: OpenLawyer-task-chatbot
+  SPRINGBOOT_ECS_TASK_DEFINITION: OpenLawyer-task-springboot
+  
+  REACT_CONTAINER_NAME: react-container
+  CHATBOT_CONTAINER_NAME: chatbot-container
+  SPRINGBOOT_CONTAINER_NAME: springboot-container
+  REACT_ECS_SERVICE: react-service
+  CHATBOT_ECS_SERVICE: chatbot-service
+  SPRINGBOOT_ECS_SERVICE: springboot-service
+
+jobs:
+  cd-springboot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        if: contains(github.ref, 'main')
+        uses: actions/checkout@v2
+      
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      
+      - name: springboot-app 경로의 env 파일 생성
+        working-directory: springboot-app
+        run: |
+          echo "${{ env.SPRINGBOOT_ENV }}" > .env
+        shell: bash
+
+      - name: springboot-app 경로의 application.yml 파일 생성
+        working-directory: springboot-app/src/main/resources
+        run: |
+          echo "${{ env.APPLICATION_YML }}" > application.yml
+        shell: bash
+      
+      - name: springboot-app 프로젝트 빌드 -> 도커파일 생성
+        working-directory: springboot-app
+        run: docker build -t ${{ env.SPRINGBOOT_ECR_REPOSITORY }} .
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_PRIVATE_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Amazon ECR Private 로그인
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Tag and push Spring Boot Docker image
+        run: | 
+          docker tag ${{ env.SPRINGBOOT_ECR_REPOSITORY }}:latest ${{ env.ECR_REGISTRY }}/${{ env.SPRINGBOOT_ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+          docker push ${{ env.ECR_REGISTRY }}/${{ env.SPRINGBOOT_ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+
+      - name: 최신 Springboot 태스크 정의 가져오기
+        id: get-task-latest-springboot
+        run: |
+          aws ecs describe-task-definition --task-definition ${{ env.SPRINGBOOT_ECS_TASK_DEFINITION }} --query taskDefinition > ${{ env.SPRINGBOOT_ECS_TASK_DEFINITION }}.json
+          cat ${{ env.SPRINGBOOT_ECS_TASK_DEFINITION }}.json
+          echo "::set-output name=task-def-file::${{ env.SPRINGBOOT_ECS_TASK_DEFINITION }}.json"
+
+      - name: Amazon ECS 태스크 정의 배포 (Springboot)
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.get-task-latest-springboot.outputs.task-def-file }}
+          service: ${{ env.SPRINGBOOT_ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
+
+  cd-react:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        if: contains(github.ref, 'main')
+        uses: actions/checkout@v2
+
+      - name: react-app 경로의 env 파일 생성
+        working-directory: react-app
+        run: |
+          echo "${{ env.REACT_ENV }}" > .env
+        shell: bash
+
+      - name: react-app 프로젝트 빌드 -> 도커파일 생성
+        working-directory: react-app
+        run: docker build -t ${{ env.REACT_ECR_REPOSITORY }} .
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_PRIVATE_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Amazon ECR Private 로그인
+        uses: aws-actions/amazon-ecr-login@v2
+      
+      - name: Tag and push React Docker image
+        run: | 
+          docker tag ${{ env.REACT_ECR_REPOSITORY }}:latest ${{ env.ECR_REGISTRY }}/${{ env.REACT_ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+          docker push ${{ env.ECR_REGISTRY }}/${{ env.REACT_ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+
+      - name: 최신 React 태스크 정의 가져오기
+        id: get-task-latest-react
+        run: |
+          aws ecs describe-task-definition --task-definition ${{ env.REACT_ECS_TASK_DEFINITION }} --query taskDefinition > ${{ env.REACT_ECS_TASK_DEFINITION }}.json
+          cat ${{ env.REACT_ECS_TASK_DEFINITION }}.json
+          echo "::set-output name=task-def-file::${{ env.REACT_ECS_TASK_DEFINITION }}.json"
+
+      - name: Amazon ECS 태스크 정의 배포 (React)
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.get-task-latest-react.outputs.task-def-file }}
+          service: ${{ env.REACT_ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
+
+  cd-chatbot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        if: contains(github.ref, 'main')
+        uses: actions/checkout@v2
+
+      - name: chatbot-app 경로의 env 파일 생성
+        working-directory: chatbot-app
+        run: |
+          echo "${{ env.CHATBOT_ENV }}" > .env
+        shell: bash
+
+      - name: chatbot-app 프로젝트 빌드 -> 도커파일 생성
+        working-directory: chatbot-app
+        run: docker build -t ${{ env.CHATBOT_ECR_REPOSITORY }} .
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_PRIVATE_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Amazon ECR Private 로그인
+        uses: aws-actions/amazon-ecr-login@v2
+      
+      - name: Tag and push Chatbot Docker image
+        run: | 
+          docker tag ${{ env.CHATBOT_ECR_REPOSITORY }}:latest ${{ env.ECR_REGISTRY }}/${{ env.CHATBOT_ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+          docker push ${{ env.ECR_REGISTRY }}/${{ env.CHATBOT_ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+
+      - name: 최신 Chatbot 태스크 정의 가져오기
+        id: get-task-latest-chatbot
+        run: |
+          aws ecs describe-task-definition --task-definition ${{ env.CHATBOT_ECS_TASK_DEFINITION }} --query taskDefinition > ${{ env.CHATBOT_ECS_TASK_DEFINITION }}.json
+          cat ${{ env.CHATBOT_ECS_TASK_DEFINITION }}.json
+          echo "::set-output name=task-def-file::${{ env.CHATBOT_ECS_TASK_DEFINITION }}.json"
+
+      - name: Amazon ECS 태스크 정의 배포 (chatbot)
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.get-task-latest-chatbot.outputs.task-def-file }}
+          service: ${{ env.CHATBOT_ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true

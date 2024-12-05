@@ -1,0 +1,27 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  application:
+    name: springboot-app
+  datasource:
+    driver-class-name: {DB_DRIVER_NAME}
+    url: {DB_URL}
+    username: {DB_USERNAME}
+    password: {DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        use_sql_comments: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+jwt:
+  config:
+    import: optional:file:.env[.properties]
+  secret:
+    key: {JWT_SECRET_KEY}
