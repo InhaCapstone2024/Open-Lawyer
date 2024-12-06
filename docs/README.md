@@ -1,9 +1,9 @@
 # 2024년 하반기 인하대학교 컴퓨터공학 종합설계 (1조) 프로젝트
 
 > Initial written at September 19, 2024 <br/>
-> last updated at: November 26, 2024
+> last updated at: December 07, 2024
 
-## Current: ver. 1.0.2<br/>
+## Current: ver. 1.1.1<br/>
 
 > - ver 1.0.0.
 >   - Init: 프로젝트 세팅 ( React + Spring Boot )
@@ -16,6 +16,14 @@
 > - ver 1.0.2.
 >   - react-app: 소셜로그인, 결제 페이지 구현
 >   - springboot-app: 소셜로그인 보안 개선, 법률 용어 API 구축
+
+> - ver 1.1.0.
+>   - react-app: 채팅 페이지, 법률 용어 사전 페이지 구현
+>   - springboot-app: 챗봇 API 연결, FastAPI 환경 세팅
+>   - chatbot-app: 챗봇 모델 구현 및 서버와 연결
+> - ver 1.1.1.
+>   - react-app: 유저 테스트 피드백 반영 UI 개선, 법률 기관 API 연결
+>   - springboot-app: 법률 기관 API 구축, 1차 배포
 
 # 1. 프로그램 (프로젝트) 설명
 
@@ -36,7 +44,7 @@
 
 - 본 프로젝트는 Docker를 사용하므로 `.env.template` 파일을 참고하여 `.env` 파일에 환경 변수값을 작성해주세요.
 
-  - root, react-app, springboot-app 총 3가지 파일을 모두 작성해주세요.
+  - root, react-app, springboot-app, chatbot-app 총 4가지 파일을 모두 작성해주세요.
   - `HOST_PORT` : 외부에서 컨테이너의 애플리케이션에 접근하는데 사용하는 포트 ( 노출되도 괜찮은 포트 )
   - `SERVER_PORT` : 애플리케이션이 컨테이너 내에서 통신하는 포트 ( 노출되면 안되는 포트 )
   - Vite에서는 보안이 필요한 환경변수의 유출을 막기 위해서 `VITE_`으로 시작하지 않는 환경변수는 무시되기 때문에 `VITE_SPRINGBOOT_HOST_PORT`가 필요합니다.
@@ -69,6 +77,13 @@
     REACT_HOST_PORT=5174
 
     IP_ADDRESS=localhost
+    ```
+
+  - `chatoot-app/.env` : Chatbot 애플리케이션 환경을 실행시키기 위해 필요한 환경 변수 파일입니다.
+
+    ```
+    # 예시
+    SERVER_PORT=8000
     ```
 
 - 본 프로젝트는 Springboot를 사용하므로 `springboot-app/src/main/resources/application.yml.template` 파일을 참고하여 `application.yml` 파일을 생성해주세요.
