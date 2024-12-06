@@ -1,9 +1,15 @@
 import { useState, useEffect } from 'react';
 import accessToken from '../apis/accessToken';
 
-const useFetchUserInfo = (ipAddress, springbootApiPort) => {
+const useFetchUserInfo = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const ipAddress = import.meta.env.VITE_IP_ADDRESS;
+  const springbootApiPort = import.meta.env.VITE_SPRINGBOOT_HOST_PORT;
+
+  // API URL fetching
+  const updateUrl = (path) => `http://${ipAddress}:${springbootApiPort}${path}`;
 
   useEffect(() => {
     const token = accessToken.getToken();
@@ -12,10 +18,10 @@ const useFetchUserInfo = (ipAddress, springbootApiPort) => {
     } else {
       fetchUserInfo(token);
     }
-  }, [ipAddress, springbootApiPort]);
-  
+  }, []);
+
   const fetchUserInfo = async (token) => {
-    const apiUrl = `http://${ipAddress}:${springbootApiPort}/api/user/userinfo`;
+    const apiUrl = updateUrl('/api/user/userinfo');
 
     try {
       const response = await fetch(apiUrl, {
@@ -46,7 +52,7 @@ const useFetchUserInfo = (ipAddress, springbootApiPort) => {
   };
 
   const requestAccessTokenFromRefreshToken = async () => {
-    const apiUrl = `http://${ipAddress}:${springbootApiPort}/api/auth/token`; // 재발급 API 경로
+    const apiUrl = updateUrl('/api/auth/token');
 
     try {
       const response = await fetch(apiUrl, {

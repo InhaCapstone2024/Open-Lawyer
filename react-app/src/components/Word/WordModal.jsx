@@ -5,7 +5,10 @@ const WordModal = ({ isOpen, term, onClose }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm">
+      <div
+        className="w-320 max-w-sm max-h-450 bg-white p-6 rounded-lg shadow-lg
+        overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
+      >
         <div className="flex justify-between items-center">
           <h2 className="text-lg font-bold">{term.termName}</h2>
           <button
@@ -15,7 +18,10 @@ const WordModal = ({ isOpen, term, onClose }) => {
             x
           </button>
         </div>
-        <p className="mt-4 text-gray-700">{term.description}</p>
+        <div
+          className="mt-4 text-gray-700"
+          dangerouslySetInnerHTML={{ __html: term.description }}
+        />
       </div>
     </div>
   );

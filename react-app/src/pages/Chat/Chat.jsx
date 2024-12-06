@@ -3,28 +3,38 @@ import { fetchPrediction, fetchChatAnswer } from '../../apis/chat';
 import GraphRenderer from '../../components/GraphRenderer/GraphRenderer';
 import MarkdownRenderer from '../../components/MarkdownRenderer/MarkdownRenderer';
 import { FaSpinner } from 'react-icons/fa';
+import useFetchUserInfo from '../../hooks/useFetchUserInfo';
 
 const Chat = () => {
-  const [messages, setMessages] = useState([
-    {
-      user: 'AI',
-      text: '안녕하세요. 당신만을 위한 법률 상담 서비스 오픈로이어입니다! 어떤 문제로 어려움을 겪고 계신가요?',
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isPredictionLoading, setIsPredictionLoading] = useState(false);
   const [isAnswerLoading, setIsAnswerLoading] = useState(false);
 
   const messagesEndRef = useRef(null);
 
-  // 스크롤
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  // 사용자 정보 가져오기
+  const { userInfo, loading } = useFetchUserInfo();
+
+  // // 스크롤
+  // const scrollToBottom = () => {
+  //   messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  // };
+
+  // useEffect(() => {
+  //   scrollToBottom();
+  // }, [messages]);
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    if (!loading && userInfo) {
+      setMessages([
+        {
+          user: 'AI',
+          text: `안녕하세요. ${userInfo.nickname}님👋 당신만을 위한 법률 상담 서비스 오픈로이어입니다! 어떤 문제로 어려움을 겪고 계신가요?`,
+        },
+      ]);
+    }
+  }, [userInfo, loading]);
 
   // 메시지 전송 처리
   const sendMessage = async (e) => {
@@ -86,7 +96,7 @@ const Chat = () => {
   };
 
   return (
-    <div className="relative flex flex-col w-full h-screen bg-gray-100">
+    <div className="relative flex flex-col w-full md:h-560 bg-gray-100 mt-10">
       {/* 메시지 섹션 */}
       <div className="flex-1 overflow-y-auto p-4 mb-20 w-full">
         <div className="space-y-4 mt-4">
@@ -128,7 +138,7 @@ const Chat = () => {
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder="메시지를 입력하세요..."
-            className="flex-1 p-2 border border-gray-400 rounded-l-lg text-gray-700"
+            className="flex-1 p-2 border bg-white border-gray-400 rounded-l-lg text-gray-700"
             disabled={isPredictionLoading || isAnswerLoading}
           />
           <button
