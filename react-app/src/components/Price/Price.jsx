@@ -36,7 +36,6 @@ const containerStyle = css`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 600px;
   background-color: var(--sub);
   gap: 15px;
   flex-shrink: 0;
