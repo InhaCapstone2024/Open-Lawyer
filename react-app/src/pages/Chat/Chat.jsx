@@ -32,9 +32,10 @@ const Chat = () => {
     setMessages((prev) => [...prev, userMessage]);
     setInputMessage('');
 
-    handlePredictionAPI(inputMessage),
-    handleChatAnswerAPI(inputMessage),
-    
+    // API 호출 순서대로 대기
+    await handlePredictionAPI(inputMessage);
+    await handleChatAnswerAPI(inputMessage);
+
     // Map
     setMessages((prev) => [...prev, { user: 'Map', jsx: <Map /> }]);
   };
@@ -87,9 +88,9 @@ const Chat = () => {
   };
 
   return (
-    <div className="relative flex flex-col w-full md:h-560 bg-gray-100 mt-10">
+    <div className="relative flex flex-col h-full bg-gray-100 w-full">
       {/* 메시지 섹션 */}
-      <div className="flex-1 overflow-y-auto p-4 mb-20 w-full">
+      <div className="flex-1 overflow-y-auto p-4 mt-10 mb-[100px]">
         <div className="space-y-4 mt-4">
           {messages.map((msg, index) => (
             <div
@@ -99,7 +100,7 @@ const Chat = () => {
               }`}
             >
               <div
-                className={`p-3 rounded-lg min-w-md text-base whitespace-pre-line break-words ${
+                className={`max-w-[85%]  p-3 rounded-lg text-base whitespace-pre-line break-words ${
                   msg.user === 'User'
                     ? 'bg-blue-500 text-white'
                     : 'bg-gray-200 text-black'
@@ -122,7 +123,7 @@ const Chat = () => {
       </div>
 
       {/* 메시지 입력 창 */}
-      <div className="absolute bottom-0 w-full bg-gray-100 border-t p-4 z-10">
+      <div className="fixed bottom-0 w-full bg-gray-100 border-t p-4 z-10">
         <form className="flex w-full max-w-full mx-auto" onSubmit={sendMessage}>
           <input
             type="text"
