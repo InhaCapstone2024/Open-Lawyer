@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import Pay from '../../components/Pay/Pay';
 import useFetchUserInfo from '../../hooks/useFetchUserInfo';
 
