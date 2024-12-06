@@ -4,26 +4,15 @@ import GraphRenderer from '../../components/GraphRenderer/GraphRenderer';
 import MarkdownRenderer from '../../components/MarkdownRenderer/MarkdownRenderer';
 import { FaSpinner } from 'react-icons/fa';
 import useFetchUserInfo from '../../hooks/useFetchUserInfo';
+import Map from '../../components/Map/Map';
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isPredictionLoading, setIsPredictionLoading] = useState(false);
   const [isAnswerLoading, setIsAnswerLoading] = useState(false);
-
   const messagesEndRef = useRef(null);
-
-  // 사용자 정보 가져오기
   const { userInfo, loading } = useFetchUserInfo();
-
-  // // 스크롤
-  // const scrollToBottom = () => {
-  //   messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  // };
-
-  // useEffect(() => {
-  //   scrollToBottom();
-  // }, [messages]);
 
   useEffect(() => {
     if (!loading && userInfo) {
@@ -39,13 +28,15 @@ const Chat = () => {
   // 메시지 전송 처리
   const sendMessage = async (e) => {
     e.preventDefault();
-
     const userMessage = { user: 'User', text: inputMessage };
     setMessages((prev) => [...prev, userMessage]);
     setInputMessage('');
 
-    handlePredictionAPI(inputMessage);
-    handleChatAnswerAPI(inputMessage);
+    handlePredictionAPI(inputMessage),
+    handleChatAnswerAPI(inputMessage),
+    
+    // Map
+    setMessages((prev) => [...prev, { user: 'Map', jsx: <Map /> }]);
   };
 
   // 승소 확률 API 호출
