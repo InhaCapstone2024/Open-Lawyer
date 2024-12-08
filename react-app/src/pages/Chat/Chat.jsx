@@ -3,39 +3,41 @@ import { fetchPrediction, fetchChatAnswer } from '../../apis/chat';
 import GraphRenderer from '../../components/GraphRenderer/GraphRenderer';
 import MarkdownRenderer from '../../components/MarkdownRenderer/MarkdownRenderer';
 import { FaSpinner } from 'react-icons/fa';
+import useFetchUserInfo from '../../hooks/useFetchUserInfo';
+import Map from '../../components/Map/Map';
 
 const Chat = () => {
-  const [messages, setMessages] = useState([
-    {
-      user: 'AI',
-      text: '안녕하세요. 당신만을 위한 법률 상담 서비스 오픈로이어입니다! 어떤 문제로 어려움을 겪고 계신가요?',
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isPredictionLoading, setIsPredictionLoading] = useState(false);
   const [isAnswerLoading, setIsAnswerLoading] = useState(false);
-
   const messagesEndRef = useRef(null);
-
-  // 스크롤
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const { userInfo, loading } = useFetchUserInfo();
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    if (!loading && userInfo) {
+      setMessages([
+        {
+          user: 'AI',
+          text: `안녕하세요. ${userInfo.nickname}님👋 당신만을 위한 법률 상담 서비스 오픈로이어입니다! 어떤 문제로 어려움을 겪고 계신가요?`,
+        },
+      ]);
+    }
+  }, [userInfo, loading]);
 
   // 메시지 전송 처리
   const sendMessage = async (e) => {
     e.preventDefault();
-
     const userMessage = { user: 'User', text: inputMessage };
     setMessages((prev) => [...prev, userMessage]);
     setInputMessage('');
 
-    handlePredictionAPI(inputMessage);
-    handleChatAnswerAPI(inputMessage);
+    // API 호출 순서대로 대기
+    await handlePredictionAPI(inputMessage);
+    await handleChatAnswerAPI(inputMessage);
+
+    // Map
+    setMessages((prev) => [...prev, { user: 'Map', jsx: <Map /> }]);
   };
 
   // 승소 확률 API 호출
@@ -86,9 +88,9 @@ const Chat = () => {
   };
 
   return (
-    <div className="relative flex flex-col w-full h-screen bg-gray-100">
+    <div className="relative flex flex-col h-full bg-gray-100 w-full">
       {/* 메시지 섹션 */}
-      <div className="flex-1 overflow-y-auto p-4 mb-20 w-full">
+      <div className="flex-1 overflow-y-auto p-4 mt-10 mb-[100px]">
         <div className="space-y-4 mt-4">
           {messages.map((msg, index) => (
             <div
@@ -98,7 +100,7 @@ const Chat = () => {
               }`}
             >
               <div
-                className={`p-3 rounded-lg min-w-md text-base whitespace-pre-line break-words ${
+                className={`max-w-[85%]  p-3 rounded-lg text-base whitespace-pre-line break-words ${
                   msg.user === 'User'
                     ? 'bg-blue-500 text-white'
                     : 'bg-gray-200 text-black'
@@ -121,14 +123,14 @@ const Chat = () => {
       </div>
 
       {/* 메시지 입력 창 */}
-      <div className="absolute bottom-0 w-full bg-gray-100 border-t p-4 z-10">
+      <div className="fixed bottom-0 w-full bg-gray-100 border-t p-4 z-10">
         <form className="flex w-full max-w-full mx-auto" onSubmit={sendMessage}>
           <input
             type="text"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder="메시지를 입력하세요..."
-            className="flex-1 p-2 border border-gray-400 rounded-l-lg text-gray-700"
+            className="flex-1 p-2 border bg-white border-gray-400 rounded-l-lg text-gray-700"
             disabled={isPredictionLoading || isAnswerLoading}
           />
           <button

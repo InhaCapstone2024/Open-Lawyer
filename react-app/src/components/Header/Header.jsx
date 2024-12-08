@@ -1,16 +1,23 @@
 /** @jsxImportSource @emotion/react */
-import { useState } from 'react';
-import { css } from '@emotion/react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from './Menu/Sidebar';
 import Menu from './Menu/Menu';
 import Button from '../Button/Button';
 import LogoImage from '../../assets/images/logo/logo.png';
+import logout from '../../apis/logout';
+import useFetchUserInfo from '../../hooks/useFetchUserInfo';
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { userInfo } = useFetchUserInfo();
+  const [isLogin, setIsLogin] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    setIsLogin(!!userInfo); // userInfo가 있으면 로그인 상태 true로 설정
+  }, [userInfo]);
 
   const openSidebar = () => setSidebarOpen(true);
   const closeSidebar = () => setSidebarOpen(false);
@@ -18,59 +25,43 @@ const Header = () => {
   const handleLogin = () => {
     if (location.pathname === '/login') {
       alert('현재 페이지입니다.');
-    } else {
-      navigate('/login');
+      return;
+    }
+    navigate('/login');
+  };
+
+  const handleLogout = async () => {
+    const logoutSuccess = await logout();
+    if (logoutSuccess) {
+      alert('로그아웃 되었습니다.');
+      // 로그아웃 시 상태 초기화
+      setIsLogin(false);
+      navigate('/');
     }
   };
 
   return (
     <>
       <Sidebar isOpen={sidebarOpen} closeSidebar={closeSidebar} />
-      <header css={HeaderWrapper}>
-        <aside css={LogoWrapper} onClick={openSidebar}>
-          <img src={LogoImage} alt="Logo" />
-          <h1>Open-Lawyer</h1>
+
+      <header className="fixed top-0 left-0 right-0 z-50 bg-gray-700 py-2 px-5 flex justify-between items-center">
+        <aside
+          className="flex items-center cursor-pointer"
+          onClick={openSidebar}
+        >
+          <img src={LogoImage} alt="Logo" className="w-8 h-auto mr-2" />
+          <h1 className="text-white text-xl font-bold font-ubuntu">
+            Open-Lawyer
+          </h1>
         </aside>
         <Menu />
-        <Button label="로그인" onClick={handleLogin} />
+        <Button
+          label={isLogin ? '로그아웃' : '로그인'}
+          onClick={isLogin ? handleLogout : handleLogin}
+        />
       </header>
     </>
   );
 };
-
-const HeaderWrapper = css`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--bluegray2);
-  padding: 0.625rem 1.25rem; /* 10px 20px */
-  @media (max-width: 768px) {
-    position: relative;
-  }
-`;
-
-const LogoWrapper = css`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-
-  img {
-    width: 2rem;
-    height: auto;
-    margin-right: 0.625rem;
-  }
-
-  h1 {
-    font-size: 1.25rem;
-    color: var(--white);
-    text-align: center;
-    font-family: 'Ubuntu';
-    font-style: normal;
-    font-weight: 700;
-    line-height: 1.5;
-    letter-spacing: -0.04rem;
-  }
-`;
 
 export default Header;

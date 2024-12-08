@@ -2,6 +2,7 @@
 import { css } from '@emotion/react';
 import Button from '../../Button/Button';
 import { useNavigate } from 'react-router-dom';
+import accessToken from '../../../apis/accessToken';
 
 const itemStyle = css`
   font-size: 1rem;
@@ -21,9 +22,14 @@ const buttonStyle = css`
 const Sidebar = ({ isOpen, closeSidebar }) => {
   const navigate = useNavigate();
 
-  const handleNavigation = (path) => {
-    navigate(path);
-    closeSidebar();
+  const checkAuthenticationAndNavigate = (path) => {
+    const token = accessToken.getToken();
+    if (!token) {
+      alert('로그인이 필요합니다!');
+      navigate('/login');
+    } else {
+      navigate(path);
+    }
   };
 
   return (
@@ -43,13 +49,19 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
       <section css={buttonStyle}>
         <Button onClick={closeSidebar} label="닫기" />
       </section>
-      <div css={itemStyle} onClick={() => handleNavigation('/chat')}>
+      <div
+        css={itemStyle}
+        onClick={() => checkAuthenticationAndNavigate('/chat')}
+      >
         챗봇과 대화하기
       </div>
-      <div css={itemStyle} onClick={() => handleNavigation('/dictionary')}>
+      <div
+        css={itemStyle}
+        onClick={() => checkAuthenticationAndNavigate('/dictionary')}
+      >
         법률 용어 사전
       </div>
-      <div css={itemStyle} onClick={() => handleNavigation('/price')}>
+      <div css={itemStyle} onClick={() => navigate('/price')}>
         가격
       </div>
     </div>
