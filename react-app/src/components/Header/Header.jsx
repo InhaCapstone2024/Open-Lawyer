@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from './Menu/Sidebar';
 import Menu from './Menu/Menu';
 import Button from '../Button/Button';
@@ -10,7 +10,6 @@ import useFetchUserInfo from '../../hooks/useFetchUserInfo';
 
 const Header = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { userInfo } = useFetchUserInfo();
   const [isLogin, setIsLogin] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -23,10 +22,6 @@ const Header = () => {
   const closeSidebar = () => setSidebarOpen(false);
 
   const handleLogin = () => {
-    if (location.pathname === '/login') {
-      alert('현재 페이지입니다.');
-      return;
-    }
     navigate('/login');
   };
 

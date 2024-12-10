@@ -23,8 +23,6 @@ const Chat = () => {
       const token = accessToken.getToken();
       // 토큰이 없을 경우 초기화 방지
       if (!token || !userInfo) {
-        alert('로그인이 필요합니다.');
-        window.location.href = '/login';
         return;
       }
 
