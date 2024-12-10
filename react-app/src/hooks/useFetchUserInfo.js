@@ -27,6 +27,12 @@ const useFetchUserInfo = () => {
   const fetchUserInfo = async (token) => {
     const apiUrl = updateUrl('/api/user/userinfo');
 
+    // 로그인 상태 확인 후 로딩
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch(apiUrl, {
         method: 'GET',
@@ -56,6 +62,9 @@ const useFetchUserInfo = () => {
 
   const requestAccessTokenFromRefreshToken = async () => {
     const apiUrl = updateUrl('/api/auth/token');
+    const token = accessToken.getToken();
+
+    if (!token) return;
 
     try {
       const response = await fetch(apiUrl, {

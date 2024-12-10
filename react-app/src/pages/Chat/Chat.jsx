@@ -17,9 +17,13 @@ const Chat = () => {
 
   useEffect(() => {
     const initializeChat = async () => {
+      // 로딩 중일 경우 초기화 방지
+      if (loading) return;
+
       const token = accessToken.getToken();
-      if (!token) {
-        console.warn('Access token is not available.');
+      // 토큰이 없을 경우 초기화 방지
+      if (!token || !userInfo) {
+        console.warn('Access token or user info is not available.');
         return;
       }
 
@@ -33,9 +37,7 @@ const Chat = () => {
       ]);
     };
 
-    if (!loading) {
-      initializeChat();
-    }
+    initializeChat();
   }, [userInfo, loading]);
 
   // 메시지 전송 처리
