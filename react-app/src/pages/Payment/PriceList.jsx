@@ -16,15 +16,17 @@ const PriceList = () => {
   };
 
   return (
-    <Price
-      title="프리미엄 플랜"
-      audience="For Individual Users"
-      price="₩3,900/월"
-      features={features}
-      ButtonComponent={
-        <Button onClick={handleNavigatePayment} label="지금 바로 결제하기" />
-      }
-    />
+    <div className="flex flex-grow bg-inherit mt-10">
+      <Price
+        title="프리미엄 플랜"
+        audience="For Individual Users"
+        price="₩3,900/월"
+        features={features}
+        ButtonComponent={
+          <Button onClick={handleNavigatePayment} label="지금 바로 결제하기" />
+        }
+      />
+    </div>
   );
 };
 export default PriceList;
