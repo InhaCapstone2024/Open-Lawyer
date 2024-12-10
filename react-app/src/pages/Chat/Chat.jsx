@@ -3,8 +3,9 @@ import { fetchPrediction, fetchChatAnswer } from '../../apis/chat';
 import GraphRenderer from '../../components/GraphRenderer/GraphRenderer';
 import MarkdownRenderer from '../../components/MarkdownRenderer/MarkdownRenderer';
 import { FaSpinner } from 'react-icons/fa';
-import useFetchUserInfo from '../../hooks/useFetchUserInfo';
+import useFetchUserInfo from '../../hooks/useFetchUserInfo.js';
 import Map from '../../components/Map/Map';
+import accessToken from '../../apis/accessToken';
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -15,14 +16,28 @@ const Chat = () => {
   const { userInfo, loading } = useFetchUserInfo();
 
   useEffect(() => {
-    if (!loading && userInfo) {
+    const initializeChat = async () => {
+      // 로딩 중일 경우 초기화 방지
+      if (loading) return;
+
+      const token = accessToken.getToken();
+      // 토큰이 없을 경우 초기화 방지
+      if (!token || !userInfo) {
+        console.warn('Access token or user info is not available.');
+        return;
+      }
+
       setMessages([
         {
           user: 'AI',
-          text: `안녕하세요. ${userInfo.nickname}님👋 당신만을 위한 법률 상담 서비스 오픈로이어입니다! 어떤 문제로 어려움을 겪고 계신가요?`,
+          text: `안녕하세요. ${
+            userInfo?.nickname || '사용자'
+          }님👋 당신만을 위한 법률 상담 서비스 오픈로이어입니다! 어떤 문제로 어려움을 겪고 계신가요?`,
         },
       ]);
-    }
+    };
+
+    initializeChat();
   }, [userInfo, loading]);
 
   // 메시지 전송 처리
@@ -100,7 +115,7 @@ const Chat = () => {
               }`}
             >
               <div
-                className={`max-w-[85%]  p-3 rounded-lg text-base whitespace-pre-line break-words ${
+                className={`max-w-[85%] p-3 rounded-lg text-base whitespace-pre-line break-words ${
                   msg.user === 'User'
                     ? 'bg-blue-500 text-white'
                     : 'bg-gray-200 text-black'
