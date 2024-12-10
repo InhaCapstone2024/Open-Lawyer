@@ -3,12 +3,21 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchLegalTerms, fetchLegalTermById } from '../../apis/term';
 import WordTag from '../../components/Word/WordTag';
 import WordModal from '../../components/Word/WordModal';
+import useFetchUserInfo from '../../hooks/useFetchUserInfo';
 
 const Dictionary = () => {
+  const { userInfo, loading } = useFetchUserInfo();
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedTerm, setSelectedTerm] = useState(null);
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태
   const itemsPerPage = 30; // 페이지당 표시할 단어 수
+
+  // 로그인 상태에서만 접속할 수 있도록 설정
+  if (!userInfo) {
+    alert('로그인이 필요합니다.');
+    window.location.href = '/login';
+    return null;
+  }
 
   const {
     data: terms = [],
