@@ -71,7 +71,7 @@ def cal_prob(input: str):
         
     #model.cuda()
     model.eval()
-    model.load_state_dict(torch.load(f'./service/prob/models/infer_prob_model.pth', map_location=torch.device('cpu')))
+    model.load_state_dict(torch.load(f'./service/prob/models/infer_prob_model_st.pth', map_location=torch.device('cpu')))
 
     first, second, fact = test_dataset[0]
 
