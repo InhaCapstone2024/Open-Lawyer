@@ -73,13 +73,7 @@ def find_similar_cases(similar_ids):
 
 # chatbot 답변 받아오는 함수
 def get_answer(input: str):
-    '''
-    input = "나는 약 19년 전 피해자와 결혼한 이래 수 년에 한 번씩 피해자를 폭행하였고, \
-            평소에도 피해자로 하여금 모욕감이나 위협을 느끼게 하는 언행을 했어. \
-            또한 이번 사건 발생 이후 나는 조사관의 결정전 조사에도 응하지 않고 면담 과정에서도 반감을 보이는 등 \
-            자신의 잘못을 반성하는 모습을 보이지 않았어"
-    '''
-    
+        
     # Create Embedding for query
     model_name = 'monologg/kobert'
     tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
@@ -96,6 +90,6 @@ def get_answer(input: str):
     prompt = find_similar_cases(similar_ids)
 
     # bedrock_chatbot 함수에 사용자 입력 전달
-    response = bedrock_chatbot(f'{prompt} 위의 판결문들을 참고한 다음, 다음 문장에서 주어지는 상황을 단계별로 분석한 뒤, 최종적으로 내가 무죄일지 아닐지 알려줘. 상황:{input}. 답변은 마크다운 형식으로 줘.').content
+    response = bedrock_chatbot(f'{prompt} 위의 판결문들을 참고한 다음, 다음 문장에서 주어지는 상황을 단계별로 분석한 뒤, 최종적으로 피고인이 무죄일지 아닐지 알려줘. 상황:{input}. 답변은 마크다운 형식으로 줘.').content
 
     return {'answer': response}
